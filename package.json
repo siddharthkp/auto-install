@@ -1,0 +1,30 @@
+{
+  "name": "rikshaw",
+  "version": "1.0.0",
+  "description": "Install dependencies as you code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/siddharthkp/rikshaw"
+  },
+  "keywords": [
+    "dependencies",
+    "package",
+    "watch",
+    "auto",
+    "rikshaw"
+  ],
+  "author": "siddharthkp",
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "1.6.0",
+    "glob": "7.0.5",
+    "is-builtin-module": "1.0.0",
+    "log-symbols": "1.0.2",
+    "ora": "0.3.0",
+    "sync-exec": "0.6.2"
+  }
+}
