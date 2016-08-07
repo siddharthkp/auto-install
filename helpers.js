@@ -30,8 +30,8 @@ let getUsedModules = () => {
         usedModules = usedModules.concat(modulesFromFile);
     }
     // De-duplicate
-    usedModules = usedModules.filter((item, pos) => {
-        return usedModules.indexOf(item) == pos
+    usedModules = usedModules.filter((module, position) => {
+        return usedModules.indexOf(module) === position;
     });
     return usedModules;
 };
