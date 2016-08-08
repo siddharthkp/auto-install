@@ -1,5 +1,5 @@
 {
-  "name": "rikshaw",
+  "name": "auto-install",
   "version": "1.0.0",
   "description": "Install dependencies as you code",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/siddharthkp/rikshaw"
+    "url": "github.com/siddharthkp/auto-install"
   },
   "keywords": [
     "dependencies",
@@ -18,7 +18,7 @@
     "rikshaw"
   ],
   "author": "siddharthkp",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chokidar": "1.6.0",
     "glob": "7.0.5",
