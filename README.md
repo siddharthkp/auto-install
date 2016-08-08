@@ -1,8 +1,8 @@
 #### auto-install
 
-Install dependencies as you code. Just hit save.
+Auto installs dependencies as you code. Just hit save.
 
-![Install dependencies as you code](https://github.com/siddharthkp/auto-install/blob/master/demo.gif?raw=true)
+![Auto installs dependencies as you code](https://github.com/siddharthkp/auto-install/blob/master/demo.gif?raw=true)
 
 #### Install
 

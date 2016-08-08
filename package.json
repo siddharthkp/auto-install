@@ -1,7 +1,7 @@
 {
   "name": "auto-install",
-  "version": "1.0.4",
-  "description": "Install dependencies as you code",
+  "version": "1.0.5",
+  "description": "Auto installs dependencies as you code",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
