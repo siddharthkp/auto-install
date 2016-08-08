@@ -1,6 +1,6 @@
 {
   "name": "auto-install",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Install dependencies as you code",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,12 @@
   ],
   "author": "siddharthkp",
   "license": "MIT",
+  "engines": {
+    "node": ">= 4.4.5"
+  },
+  "bin": {
+    "auto-install": "./index.js"
+  },
   "dependencies": {
     "chokidar": "1.6.0",
     "glob": "7.0.5",
