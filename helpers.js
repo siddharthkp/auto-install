@@ -161,6 +161,8 @@ Array.prototype.diff = function(a) {
     return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
 
+/* Reinstall modules */
+
 let reinstall = () => {
     let spinner = startSpinner('Cleaning up', 'green');
     runCommand('npm install');
