@@ -2,7 +2,7 @@
 
 Auto installs dependencies as you code. Just hit save.
 
-![Auto installs dependencies as you code](https://github.com/siddharthkp/auto-install/blob/master/demo.gif?raw=true)
+![Auto installs dependencies as you code](https://dl.dropboxusercontent.com/u/23355164/auto-install.gif)
 
 #### Install
 
