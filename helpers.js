@@ -117,9 +117,16 @@ let getModulesFromFile = (path) => {
         match = match.replace('require', '');
         match = match.substring(2)
         match = match.substring(0, match.length - 2);
-        modules.push(match);
+        if (isValidModule(match)) modules.push(match);
     }
     return modules;
+};
+
+/* Check for valid string - to stop malicious intentions */
+
+let isValidModule = (module) => {
+    let regex = new RegExp("^([a-z0-9-_]{1,})$");
+    return regex.test(module);
 };
 
 /* Filter registry modules */
