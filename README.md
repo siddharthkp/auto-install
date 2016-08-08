@@ -12,6 +12,8 @@ Auto installs dependencies as you code. Just hit save.
 
 Run `auto-install` in the directory you are working in
 
+Beware of typos :smile:
+
 #### Show your support
 
 :star: this repo
