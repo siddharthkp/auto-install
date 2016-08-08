@@ -6,6 +6,8 @@ const isBuiltInModule = require('is-builtin-module');
 const syncExec = require("sync-exec");
 const ora = require('ora');
 const logSymbols = require('log-symbols');
+const argv = require('yargs').argv;
+const request = require('sync-request');
 
 /* Get installed modules
  * Read dependencies array from package.json
@@ -42,6 +44,9 @@ let getUsedModules = () => {
 
 let installModule = (module) => {
     let spinner = startSpinner('Installing ' + module, 'green');
+    if (secureMode && !isModulePopular(module)) {
+        stopSpinner(spinner, module + ' not trusted', 'yellow');
+    }
     let success = runCommand('npm install ' + module + ' --save');
     if (success) stopSpinner(spinner, module + ' installed', 'green');
     else stopSpinner(spinner, module + ' installation failed', 'yellow');
@@ -167,6 +172,20 @@ let reinstall = () => {
     let spinner = startSpinner('Cleaning up', 'green');
     runCommand('npm install');
     stopSpinner(spinner);
+};
+
+/* Secure mode */
+
+let secureMode = false;
+if (argv.secure) secureMode = true;
+
+/* Is module popular? - for secure mode */
+
+const POPULARITY_THRESHOLD = 10000;
+let isModulePopular = (module) => {
+    let result = request('GET', 'https://api.npmjs.org/downloads/point/last-month/' + module);
+    let downloads = JSON.parse(result.body).downloads;
+    return (downloads > POPULARITY_THRESHOLD);
 };
 
 /* Public helper functions */
