@@ -1,6 +1,6 @@
 {
   "name": "auto-install",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Install dependencies as you code",
   "main": "index.js",
   "scripts": {
@@ -11,11 +11,11 @@
     "url": "github.com/siddharthkp/auto-install"
   },
   "keywords": [
+    "auto",
+    "install",
     "dependencies",
     "package",
-    "watch",
-    "auto",
-    "rikshaw"
+    "watch"
   ],
   "author": "siddharthkp",
   "license": "MIT",
