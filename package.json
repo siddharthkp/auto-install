@@ -17,6 +17,7 @@
   "dependencies": {
     "chokidar": "1.6.0",
     "glob": "7.0.5",
+    "glob-array": "^0.1.2",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",
     "ora": "0.3.0",

@@ -4,6 +4,7 @@ const fs = require('fs');
 const glob = require('glob');
 const isBuiltInModule = require('is-builtin-module');
 const syncExec = require("sync-exec");
+const globArray = require('glob-array');
 const ora = require('ora');
 const logSymbols = require('log-symbols');
 const argv = require('yargs').argv;
@@ -114,7 +115,11 @@ let getFiles = (path) => {
  * Return path of all js files
  */
 let getTestFiles = (path) => {
-    return glob.sync("**/*.spec.js", {'ignore': ['node_modules/**/*']});
+    let patterns = [
+      "**/*.spec.js",
+      "**/*.test.js"
+    ];
+    return globArray.sync(patterns, {'ignore': ['node_modules/**/*']});
 };
 
 /* File reader
