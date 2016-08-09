@@ -12,7 +12,7 @@ Auto installs dependencies as you code. Just hit save.
 
 Run `auto-install` in the directory you are working in
 
-Secure mode: `auto-install --secure` Only install popular modules (> 10k downloads in the last month)
+Secure mode: `auto-install --secure` Install popular modules only (> 10k downloads in the last month)
 
 #### Show your support
 
