@@ -1,6 +1,6 @@
 {
   "name": "auto-install",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Auto installs dependencies as you code",
   "main": "index.js",
   "scripts": {

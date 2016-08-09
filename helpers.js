@@ -46,6 +46,7 @@ let installModule = (module) => {
     let spinner = startSpinner('Installing ' + module, 'green');
     if (secureMode && !isModulePopular(module)) {
         stopSpinner(spinner, module + ' not trusted', 'yellow');
+        return;
     }
     let success = runCommand('npm install ' + module + ' --save');
     if (success) stopSpinner(spinner, module + ' installed', 'green');
