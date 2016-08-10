@@ -17,7 +17,8 @@ const request = require('sync-request');
 let getInstalledModules = () => {
     let content = JSON.parse(readFile('package.json'));
     let installedModules = [];
-    for (let key in content.dependencies) installedModules.push(key);
+    let installedDependencies = Object.assign(content.dependencies,content.devDependencies);
+    for (let key in installedDependencies) installedModules.push(key);
     return installedModules;
 };
 
