@@ -17,16 +17,12 @@ let main = () => {
     let installedModules = [];
     installedModules = helpers.getInstalledModules();
 
-    let usedModules = helpers.getUsedModules().usedModules;
-    let usedTestModules = helpers.getUsedModules().usedTestModules;
+    let usedModules = helpers.getUsedModules();
     usedModules = helpers.filterRegistryModules(usedModules);
-    usedTestModules = helpers.filterRegistryModules(usedTestModules);
 
     //installModules
     let modulesNotInstalled = usedModules.diff(installedModules);
-    let testModulesNotInstalled = usedModules.diff(installedModules);
     for (let i = 0; i < modulesNotInstalled.length; i++) helpers.installModule(modulesNotInstalled[i]);
-    for (let j = 0; j < testModulesNotInstalled.length; j++) helpers.installModule(testModulesNotInstalled[j], "-dev");     
 
     //removeUnusedModules
     let unusedModules = installedModules.diff(usedModules);

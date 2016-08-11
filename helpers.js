@@ -4,7 +4,6 @@ const fs = require('fs');
 const glob = require('glob');
 const isBuiltInModule = require('is-builtin-module');
 const syncExec = require("sync-exec");
-const globArray = require('glob-array');
 const ora = require('ora');
 const logSymbols = require('log-symbols');
 const argv = require('yargs').argv;
@@ -17,8 +16,7 @@ const request = require('sync-request');
 let getInstalledModules = () => {
     let content = JSON.parse(readFile('package.json'));
     let installedModules = [];
-    let installedDependencies = Object.assign(content.dependencies,content.devDependencies);
-    for (let key in installedDependencies) installedModules.push(key);
+    for (let key in content.dependencies) installedModules.push(key);
     return installedModules;
 };
 
@@ -28,40 +26,29 @@ let getInstalledModules = () => {
 
 let getUsedModules = () => {
     let files = getFiles();
-    let testFiles = getTestFiles();
     let usedModules = [];
     for (let i = 0; i < files.length; i++) {
         let modulesFromFile = getModulesFromFile(files[i]);
         usedModules = usedModules.concat(modulesFromFile);
     }
-
-    for (let j= 0; j < testFiles.length; j++) {
-        let testModulesFromFile = getModulesFromFile(testFiles[j]);
-        usedTestModules = usedTestModules.concat(testModulesFromFile);
-    }
     // De-duplicate
     usedModules = usedModules.filter((module, position) => {
         return usedModules.indexOf(module) === position;
     });
-
-    usedTestModules = usedTestModules.filter((module, position) => {
-        return usedTestModules.indexOf(module) === position;
-    });
-    return {usedModules,usedTestModules};
+    return usedModules;
 };
 
 /* Install module
  * Install given module
  */
 
-let installModule = (module, type) => {
-    type = type|"";
+let installModule = (module) => {
     let spinner = startSpinner('Installing ' + module, 'green');
     if (secureMode && !isModulePopular(module)) {
         stopSpinner(spinner, module + ' not trusted', 'yellow');
         return;
     }
-    let success = runCommand('npm install ' + module + ' --save'+type);
+    let success = runCommand('npm install ' + module + ' --save');
     if (success) stopSpinner(spinner, module + ' installed', 'green');
     else stopSpinner(spinner, module + ' installation failed', 'yellow');
 };
@@ -110,17 +97,6 @@ let stopSpinner = (spinner, message, type) => {
  */
 let getFiles = (path) => {
     return glob.sync("**/*.js", {'ignore': ['node_modules/**/*']});
-};
-
-/* Get all js files for test
- * Return path of all js files
- */
-let getTestFiles = (path) => {
-    let patterns = [
-      "**/*.spec.js",
-      "**/*.test.js"
-    ];
-    return globArray.sync(patterns, {'ignore': ['node_modules/**/*']});
 };
 
 /* File reader
