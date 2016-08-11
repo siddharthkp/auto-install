@@ -1,12 +1,12 @@
 {
   "name": "auto-install",
-  "version": "1.2.3",
+  "version": "1.2.2",
   "description": "Auto installs dependencies as you code",
   "keywords": "auto, dependencies, install, package, watch",
   "homepage": "https://github.com/siddharthkp/auto-install#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/siddharthkp/auto-install"
+    "url": "git://github.com/siddharthkp/auto-install.git"
   },
   "license": "MIT",
   "main": "index.js",
