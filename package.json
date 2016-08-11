@@ -3,7 +3,7 @@
   "version": "1.2.1",
   "description": "Auto installs dependencies as you code",
   "keywords": "auto, dependencies, install, package, watch",
-  "repository": "siddharthkp/auto-install",
+  "repository": "https://github.com/siddharthkp/auto-install",
   "license": "MIT",
   "main": "index.js",
   "bin": "index.js",
