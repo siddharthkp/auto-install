@@ -18,6 +18,10 @@ Secure mode: `auto-install --secure` Install popular modules only (> 10k downloa
 
 :star: this repo
 
+#### FAQ
+
+[Does it protect against typosquatting?](https://github.com/siddharthkp/auto-install/issues/6)
+
 #### License
 
 MIT © [siddharthkp](https://github.com/siddharthkp)
