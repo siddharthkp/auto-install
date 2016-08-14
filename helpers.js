@@ -16,7 +16,14 @@ const request = require('sync-request');
 let getInstalledModules = () => {
     let content = JSON.parse(readFile('package.json'));
     let installedModules = [];
-    for (let key in content.dependencies) installedModules.push(key);
+    for (let key in content.dependencies) installedModules.push({
+        name: key,
+        dev: false
+    });
+    for (let key in content.devDependencies) installedModules.push({
+        name: key,
+        dev: true
+    });
     return installedModules;
 };
 
@@ -27,14 +34,12 @@ let getInstalledModules = () => {
 let getUsedModules = () => {
     let files = getFiles();
     let usedModules = [];
-    for (let i = 0; i < files.length; i++) {
-        let modulesFromFile = getModulesFromFile(files[i]);
-        usedModules = usedModules.concat(modulesFromFile);
+    for (let fileName of files) {
+        let modulesFromFile = getModulesFromFile(fileName);
+        let dev = isTestFile(fileName);
+        for (let name of modulesFromFile) usedModules.push({name, dev});
     }
-    // De-duplicate
-    usedModules = usedModules.filter((module, position) => {
-        return usedModules.indexOf(module) === position;
-    });
+    usedModules = deduplicate(usedModules);
     return usedModules;
 };
 
@@ -42,23 +47,37 @@ let getUsedModules = () => {
  * Install given module
  */
 
-let installModule = (module) => {
-    let spinner = startSpinner('Installing ' + module, 'green');
-    if (secureMode && !isModulePopular(module)) {
-        stopSpinner(spinner, module + ' not trusted', 'yellow');
+let installModule = ({name, dev}) => {
+    let spinner = startSpinner('Installing ' + name, 'green');
+    if (secureMode && !isModulePopular(name)) {
+        stopSpinner(spinner, name + ' not trusted', 'yellow');
         return;
     }
-    let success = runCommand('npm install ' + module + ' --save');
-    if (success) stopSpinner(spinner, module + ' installed', 'green');
-    else stopSpinner(spinner, module + ' installation failed', 'yellow');
+
+    let command = 'npm install ' + name + ' --save';
+    let message = name + ' installed';
+
+    if (dev) command += '-dev';
+    if (dev) message += ' in devDependencies';
+
+    let success = runCommand(command);
+    if (success) stopSpinner(spinner, message, 'green');
+    else stopSpinner(spinner, name + ' installation failed', 'yellow');
 };
 
 /* Uninstall module */
 
-let uninstallModule = (module) => {
-    let spinner = startSpinner('Uninstalling ' + module, 'red');
-    runCommand('npm uninstall ' + module + ' --save');
-    stopSpinner(spinner, module + ' removed', 'red');
+let uninstallModule = ({name, dev}) => {
+    let spinner = startSpinner('Uninstalling ' + name, 'red');
+
+    let command = 'npm uninstall ' + name + ' --save';
+    let message = name + ' removed';
+
+    if (dev) command += '-dev';
+    if (dev) message += ' from devDependencies';
+
+    runCommand(command);
+    stopSpinner(spinner, message, 'red');
 };
 
 /* Command runner
@@ -130,9 +149,9 @@ let getModulesFromFile = (path) => {
 
 /* Check for valid string - to stop malicious intentions */
 
-let isValidModule = (module) => {
+let isValidModule = ({name, dev}) => {
     let regex = new RegExp("^([a-z0-9-_]{1,})$");
-    return regex.test(module);
+    return regex.test(name);
 };
 
 /* Filter registry modules */
@@ -147,7 +166,7 @@ let filterRegistryModules = (modules) => {
 
 let removeBuiltInModules = (modules) => {
     modules = modules.filter((module) => {
-        return !isBuiltInModule(module);
+        return !isBuiltInModule(module.name);
     });
     return modules;
 };
@@ -156,15 +175,16 @@ let removeBuiltInModules = (modules) => {
 
 let removeLocalFiles = (modules) => {
     modules = modules.filter((module) => {
-        return (module.indexOf('./') !== 0)
+        return (module.name.indexOf('./') !== 0)
     });
     return modules;
 };
 
-/* Array diff prototype */
+/* Modules diff */
 
-Array.prototype.diff = function(a) {
-    return this.filter(function(i) {return a.indexOf(i) < 0;});
+let diff = (first, second) => {
+    let namesFromSecond = getNamesFromModules(second);
+    return first.filter(module => namesFromSecond.indexOf(module.name) < 0);
 };
 
 /* Reinstall modules */
@@ -183,11 +203,64 @@ if (argv.secure) secureMode = true;
 /* Is module popular? - for secure mode */
 
 const POPULARITY_THRESHOLD = 10000;
-let isModulePopular = (module) => {
-    let result = request('GET', 'https://api.npmjs.org/downloads/point/last-month/' + module);
-    let downloads = JSON.parse(result.body).downloads;
-    return (downloads > POPULARITY_THRESHOLD);
+let isModulePopular = ({name, dev}) => {
+    let url = 'https://apa.npmjs.org/downloads/point/last-month/' + name;
+    request('GET', url, (error, response, body) => {
+        let downloads = JSON.parse(body).downloads;
+        return (downloads > POPULARITY_THRESHOLD);
+    });
 };
+
+/* Is test file? */
+
+let isTestFile = (name) => {
+    return (name.endsWith('.spec.js') || name.endsWith('.test.js'));
+};
+
+/* Get module names from array of module objects */
+
+let getNamesFromModules = (modules) => {
+    return modules.map(module => module.name);
+}
+
+/* Dedup modules
+ * Divide modules into prod and dev
+ * Deduplicates each list
+ */
+
+
+let deduplicate = (modules) => {
+    let dedupedModules = [];
+
+    let testModules = modules.filter(module => module.dev);
+    dedupedModules = dedupedModules.concat(deduplicateSimilarModules(testModules));
+
+    let prodModules = modules.filter(module => !module.dev);
+    dedupedModules = dedupedModules.concat(deduplicateSimilarModules(prodModules));
+
+    return dedupedModules;
+}
+
+/* Dedup similar modules
+ * Deduplicates list
+ * Ignores/assumes type of the modules in list
+*/
+
+let deduplicateSimilarModules = (modules) => {
+    let dedupedModules = [];
+    let dedupedModuleNames = [];
+
+    for (let module of modules) {
+        if (dedupedModuleNames.indexOf(module.name) === -1) {
+            dedupedModules.push(module);
+            dedupedModuleNames.push(module.name);
+        }
+    }
+
+    return dedupedModules;
+};
+
+
 
 /* Public helper functions */
 
@@ -197,6 +270,7 @@ module.exports = {
     filterRegistryModules,
     installModule,
     uninstallModule,
+    diff,
     reinstall
 };
 
