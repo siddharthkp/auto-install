@@ -7,6 +7,7 @@ const logSymbols = require('log-symbols');
 const argv = require('yargs').argv;
 const request = require('sync-request');
 const detective = require('detective');
+const colors = require('colors');
 
 /* Secure mode */
 
@@ -134,6 +135,10 @@ let getUsedModules = () => {
 
 let runCommand = (command) => {
     let response = syncExec(command);
+    if (response.stderr) {
+        console.log();
+        console.log(response.stderr.red);
+    }
     return !response.status; // status = 0 for success
 };
 
