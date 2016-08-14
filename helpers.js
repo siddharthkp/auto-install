@@ -27,6 +27,8 @@ let readFile = (path) => {
 
 let getInstalledModules = () => {
     let content = JSON.parse(readFile('package.json'));
+    let installedModules = [];
+
     for (let key in content.dependencies) {
         installedModules.push({
             name: key,
@@ -39,7 +41,7 @@ let getInstalledModules = () => {
             dev: true
         });
     }
-    console.log(installedModules);
+
     return installedModules;
 };
 
