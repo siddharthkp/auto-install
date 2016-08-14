@@ -35,11 +35,13 @@ let getInstalledModules = () => {
             dev: false
         });
     }
-    for (let key of Object.keys(content.devDependencies)) {
-        installedModules.push({
-            name: key,
-            dev: true
-        });
+    if (content.devDependencies) {
+        for (let key of Object.keys(content.devDependencies)) {
+            installedModules.push({
+                name: key,
+                dev: true
+            });
+        }
     }
 
     return installedModules;
