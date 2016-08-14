@@ -48,13 +48,13 @@ let getInstalledModules = () => {
 /* Get all js files
  * Return path of all js files
  */
-let getFiles = (path) => {
+let getFiles = () => {
     return glob.sync("**/*.js", {'ignore': ['node_modules/**/*']});
 };
 
 /* Check for valid string - to stop malicious intentions */
 
-let isValidModule = ({name, dev}) => {
+let isValidModule = ({name}) => {
     let regex = new RegExp("^([a-z0-9-_]{1,})$");
     return regex.test(name);
 };
@@ -62,8 +62,6 @@ let isValidModule = ({name, dev}) => {
 /* Find modules from file
  * Returns array of modules from a file
  */
-
-let pattern = /require\((.*?)\)/g;
 
 let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
@@ -166,7 +164,7 @@ let stopSpinner = (spinner, message, type) => {
 /* Is module popular? - for secure mode */
 
 const POPULARITY_THRESHOLD = 10000;
-let isModulePopular = ({name, dev}) => {
+let isModulePopular = ({name}) => {
     let url = 'https://api.npmjs.org/downloads/point/last-month/' + name;
     request('GET', url, (error, response, body) => {
         let downloads = JSON.parse(body).downloads;
