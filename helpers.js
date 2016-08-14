@@ -161,7 +161,7 @@ let stopSpinner = (spinner, message, type) => {
 
 const POPULARITY_THRESHOLD = 10000;
 let isModulePopular = (name) => {
-    let url = 'https://api.npmjs.org/downloads/point/last-month/' + name;
+    let url = `https://api.npmjs.org/downloads/point/last-month/${name}`;
     request('GET', url, (error, response, body) => {
         let downloads = JSON.parse(body).downloads;
         return (downloads > POPULARITY_THRESHOLD);
@@ -173,30 +173,30 @@ let isModulePopular = (name) => {
  */
 
 let installModule = ({name, dev}) => {
-    let spinner = startSpinner('Installing ' + name, 'green');
+    let spinner = startSpinner(`Installing ${name}`, 'green');
     if (secureMode && !isModulePopular(name)) {
-        stopSpinner(spinner, name + ' not trusted', 'yellow');
+        stopSpinner(spinner, `${name} not trusted`, 'yellow');
         return;
     }
 
-    let command = 'npm install ' + name + ' --save';
-    let message = name + ' installed';
+    let command = `npm install ${name} --save`;
+    let message = `${name} installed`;
 
     if (dev) command += '-dev';
     if (dev) message += ' in devDependencies';
 
     let success = runCommand(command);
     if (success) stopSpinner(spinner, message, 'green');
-    else stopSpinner(spinner, name + ' installation failed', 'yellow');
+    else stopSpinner(spinner, `${name} installation failed`, 'yellow');
 };
 
 /* Uninstall module */
 
 let uninstallModule = ({name, dev}) => {
-    let spinner = startSpinner('Uninstalling ' + name, 'red');
+    let spinner = startSpinner(`Uninstalling ${name}`, 'red');
 
-    let command = 'npm uninstall ' + name + ' --save';
-    let message = name + ' removed';
+    let command = `npm uninstall ${name} --save`;
+    let message = `${name} removed`;
 
     if (dev) command += '-dev';
     if (dev) message += ' from devDependencies';
