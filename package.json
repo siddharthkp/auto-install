@@ -25,6 +25,5 @@
     "sync-exec": "0.6.2",
     "sync-request": "3.0.1",
     "yargs": "4.8.1"
-  },
-  "devDependencies": {}
+  }
 }
