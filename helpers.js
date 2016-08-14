@@ -207,25 +207,15 @@ let uninstallModule = ({name, dev}) => {
 
 /* Remove built in/native modules */
 
-let removeBuiltInModules = (modules) => {
-    modules = modules.filter((module) => !isBuiltInModule(module.name));
-    return modules;
-};
+let removeBuiltInModules = (modules) => modules.filter((module) => !isBuiltInModule(module.name));
 
 /* Remove local files that are required */
 
-let removeLocalFiles = (modules) => {
-    modules = modules.filter((module) => (module.name.indexOf('./') !== 0));
-    return modules;
-};
+let removeLocalFiles = (modules) => modules.filter((module) => (module.name.indexOf('./') !== 0));
 
 /* Filter registry modules */
 
-let filterRegistryModules = (modules) => {
-    modules = removeBuiltInModules(modules);
-    modules = removeLocalFiles(modules);
-    return modules;
-};
+let filterRegistryModules = (modules) => removeBuiltInModules(removeLocalFiles(modules));
 
 /* Get module names from array of module objects */
 
