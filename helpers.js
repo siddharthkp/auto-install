@@ -48,9 +48,7 @@ let getInstalledModules = () => {
 /* Get all js files
  * Return path of all js files
  */
-let getFiles = () => {
-    return glob.sync("**/*.js", {'ignore': ['node_modules/**/*']});
-};
+let getFiles = () => glob.sync("**/*.js", {'ignore': ['node_modules/**/*']});
 
 /* Check for valid string - to stop malicious intentions */
 
@@ -74,9 +72,7 @@ let getModulesFromFile = (path) => {
  * [.spec.js, .test.js] are supported test file formats
  */
 
-let isTestFile = (name) => {
-    return (name.endsWith('.spec.js') || name.endsWith('.test.js'));
-};
+let isTestFile = (name) => (name.endsWith('.spec.js') || name.endsWith('.test.js'));
 
 /* Dedup similar modules
  * Deduplicates list
@@ -212,18 +208,14 @@ let uninstallModule = ({name, dev}) => {
 /* Remove built in/native modules */
 
 let removeBuiltInModules = (modules) => {
-    modules = modules.filter((module) => {
-        return !isBuiltInModule(module.name);
-    });
+    modules = modules.filter((module) => !isBuiltInModule(module.name));
     return modules;
 };
 
 /* Remove local files that are required */
 
 let removeLocalFiles = (modules) => {
-    modules = modules.filter((module) => {
-        return (module.name.indexOf('./') !== 0)
-    });
+    modules = modules.filter((module) => (module.name.indexOf('./') !== 0));
     return modules;
 };
 
@@ -237,9 +229,7 @@ let filterRegistryModules = (modules) => {
 
 /* Get module names from array of module objects */
 
-let getNamesFromModules = (modules) => {
-    return modules.map(module => module.name);
-};
+let getNamesFromModules = (modules) => modules.map(module => module.name);
 
 /* Modules diff */
 
