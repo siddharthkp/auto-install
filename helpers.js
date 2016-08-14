@@ -8,6 +8,7 @@ const ora = require('ora');
 const logSymbols = require('log-symbols');
 const argv = require('yargs').argv;
 const request = require('sync-request');
+const detective = require('detective');
 
 /* Get installed modules
  * Read dependencies array from package.json
@@ -134,16 +135,8 @@ let pattern = /require\((.*?)\)/g;
 
 let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
-    let modules = [];
-    let matches = content.match(pattern);
-    if (!matches) return modules;
-    for(let i = 0; i < matches.length; i++) {
-        let match = matches[i];
-        match = match.replace('require', '');
-        match = match.substring(2)
-        match = match.substring(0, match.length - 2);
-        if (isValidModule(match)) modules.push(match);
-    }
+    let modules = detective(content);
+    modules = modules.filter((module) => isValidModule(module));
     return modules;
 };
 
