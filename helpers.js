@@ -137,7 +137,7 @@ let runCommand = (command) => {
     let response = syncExec(command);
     if (response.stderr) {
         console.log();
-        console.log(response.stderr.red);
+        console.log(colors.red(response.stderr));
     }
     return !response.status; // status = 0 for success
 };
