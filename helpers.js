@@ -48,12 +48,12 @@ let getInstalledModules = () => {
 /* Get all js files
  * Return path of all js files
  */
-let getFiles = () => glob.sync("**/*.js", {'ignore': ['node_modules/**/*']});
+let getFiles = () => glob.sync('**/*.js', {'ignore': ['node_modules/**/*']});
 
 /* Check for valid string - to stop malicious intentions */
 
 let isValidModule = ({name}) => {
-    let regex = new RegExp("^([a-z0-9-_]{1,})$");
+    let regex = new RegExp('^([a-z0-9-_]{1,})$');
     return regex.test(name);
 };
 
