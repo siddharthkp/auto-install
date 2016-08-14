@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const helpers = require('./helpers');
-const chokidar = require("chokidar");
+const chokidar = require('chokidar');
 
 let watchersInitialized = false;
 let main;
