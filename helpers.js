@@ -228,7 +228,6 @@ let getNamesFromModules = (modules) => {
  * Deduplicates each list
  */
 
-
 let deduplicate = (modules) => {
     let dedupedModules = [];
 
@@ -259,8 +258,6 @@ let deduplicateSimilarModules = (modules) => {
 
     return dedupedModules;
 };
-
-
 
 /* Public helper functions */
 
