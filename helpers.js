@@ -32,7 +32,6 @@ let getUsedModules = () => {
         let modulesFromFile = getModulesFromFile(files[i]);
         usedModules = usedModules.concat(modulesFromFile);
     }
-    console.log(usedModules);
     // De-duplicate
     usedModules = usedModules.filter((module, position) => {
         return usedModules.indexOf(module) === position;
