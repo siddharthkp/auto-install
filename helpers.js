@@ -27,15 +27,19 @@ let readFile = (path) => {
 
 let getInstalledModules = () => {
     let content = JSON.parse(readFile('package.json'));
-    let installedModules = [];
-    for (let key in content.dependencies) installedModules.push({
-        name: key,
-        dev: false
-    });
-    for (let key in content.devDependencies) installedModules.push({
-        name: key,
-        dev: true
-    });
+    for (let key in content.dependencies) {
+        installedModules.push({
+            name: key,
+            dev: false
+        });
+    }
+    for (let key in content.devDependencies) {
+        installedModules.push({
+            name: key,
+            dev: true
+        });
+    }
+    console.log(installedModules);
     return installedModules;
 };
 
@@ -66,7 +70,7 @@ let getModulesFromFile = (path) => {
     return modules;
 };
 
-/* Is test file? 
+/* Is test file?
  * [.spec.js, .test.js] are supported test file formats
  */
 

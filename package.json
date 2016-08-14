@@ -26,7 +26,5 @@
     "sync-request": "3.0.1",
     "yargs": "4.8.1"
   },
-  "devDependencies": {
-    "eslint-config-airbnb": "10.0.1"
-  }
+  "devDependencies": {}
 }
