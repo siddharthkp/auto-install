@@ -21,12 +21,12 @@ let main = () => {
     usedModules = helpers.filterRegistryModules(usedModules);
 
     //installModules
-    let modulesNotInstalled = usedModules.diff(installedModules);
-    for (let i = 0; i < modulesNotInstalled.length; i++) helpers.installModule(modulesNotInstalled[i]);
+    let modulesNotInstalled = helpers.diff(usedModules, installedModules);
+    for (let module of modulesNotInstalled) helpers.installModule(module);
 
     //removeUnusedModules
-    let unusedModules = installedModules.diff(usedModules);
-    for (let i = 0; i < unusedModules.length; i++) helpers.uninstallModule(unusedModules[i]);
+    let unusedModules = helpers.diff(installedModules, usedModules);
+    for (let module of unusedModules) helpers.uninstallModule(module);
 
     helpers.reinstall();
     if (!watchersInitialized) initializeWatchers();
