@@ -18,11 +18,12 @@ let main = () => {
     let usedModules = helpers.getUsedModules();
     usedModules = helpers.filterRegistryModules(usedModules);
 
-    //installModules
+    // installModules
     let modulesNotInstalled = helpers.diff(usedModules, installedModules);
     for (let module of modulesNotInstalled) helpers.installModule(module);
 
-    //removeUnusedModules
+    // removeUnusedModules
+
     let unusedModules = helpers.diff(installedModules, usedModules);
     for (let module of unusedModules) helpers.uninstallModule(module);
 
@@ -45,7 +46,7 @@ let initializeWatchers = () => {
 
     watchersInitialized = true;
     console.log('Watchers initialized');
-}
+};
 
 /* Turn the key */
 main();
