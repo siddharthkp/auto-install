@@ -221,7 +221,7 @@ let isTestFile = (name) => {
 
 let getNamesFromModules = (modules) => {
     return modules.map(module => module.name);
-}
+};
 
 /* Dedup modules
  * Divide modules into prod and dev
@@ -238,7 +238,7 @@ let deduplicate = (modules) => {
     dedupedModules = dedupedModules.concat(deduplicateSimilarModules(prodModules));
 
     return dedupedModules;
-}
+};
 
 /* Dedup similar modules
  * Deduplicates list
