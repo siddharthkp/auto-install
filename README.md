@@ -1,5 +1,8 @@
 #### auto-install
 
+[![Build
+Status](https://travis-ci.org/siddharthkp/auto-install.svg)](https://travis-ci.org/siddharthkp/auto-install)
+
 Auto installs dependencies as you code. Just hit save.
 
 ![Auto installs dependencies as you code](https://dl.dropboxusercontent.com/u/23355164/auto-install.gif)
