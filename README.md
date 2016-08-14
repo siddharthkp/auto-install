@@ -14,6 +14,8 @@ Run `auto-install` in the directory you are working in
 
 Secure mode: `auto-install --secure` Install popular modules only (> 10k downloads in the last month)
 
+Modules in `.spec.js` and `.test.js` are added to `devDependencies`
+
 #### Show your support
 
 :star: this repo
