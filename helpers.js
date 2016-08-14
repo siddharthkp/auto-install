@@ -196,7 +196,7 @@ if (argv.secure) secureMode = true;
 /* Is module popular? - for secure mode */
 
 const POPULARITY_THRESHOLD = 10000;
-let isModulePopular = ({name, dev}) => {
+let isModulePopular = (name) => {
     let url = 'https://api.npmjs.org/downloads/point/last-month/' + name;
     request('GET', url, (error, response, body) => {
         let downloads = JSON.parse(body).downloads;
