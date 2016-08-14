@@ -10,7 +10,6 @@ const argv = require('yargs').argv;
 const request = require('sync-request');
 const detective = require('detective');
 
-
 /* Get installed modules
  * Read dependencies array from package.json
  */
