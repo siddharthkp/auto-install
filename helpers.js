@@ -1,5 +1,3 @@
-'use strict'
-
 const fs = require('fs');
 const glob = require('glob');
 const isBuiltInModule = require('is-builtin-module');

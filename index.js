@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict';
-
 const helpers = require('./helpers');
 const chokidar = require('chokidar');
 

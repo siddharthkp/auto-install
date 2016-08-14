@@ -1,12 +1,9 @@
 module.exports = {
     'extends': 'airbnb',
-    'plugins': [
-        'react',
-        'jsx-a11y',
-        'import'
-    ],
     'rules': {
         'no-console': 'off',
-        indent: ['error', 4]
+        'indent': ['error', 4],
+        'prefer-const': 'off',
+        'comma-dangle': ['error', 'never']
     }
 };
