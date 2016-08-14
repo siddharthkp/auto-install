@@ -204,7 +204,7 @@ if (argv.secure) secureMode = true;
 
 const POPULARITY_THRESHOLD = 10000;
 let isModulePopular = ({name, dev}) => {
-    let url = 'https://apa.npmjs.org/downloads/point/last-month/' + name;
+    let url = 'https://api.npmjs.org/downloads/point/last-month/' + name;
     request('GET', url, (error, response, body) => {
         let downloads = JSON.parse(body).downloads;
         return (downloads > POPULARITY_THRESHOLD);
