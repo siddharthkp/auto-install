@@ -48,7 +48,7 @@ let getInstalledModules = () => {
 /* Get all js files
  * Return path of all js files
  */
-let getFiles = () => glob.sync('**/*.js', {'ignore': ['node_modules/**/*']});
+let getFiles = () => glob.sync('**/*.js', {ignore: ['node_modules/**/*']});
 
 /* Check for valid string - to stop malicious intentions */
 
