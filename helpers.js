@@ -29,13 +29,13 @@ let getInstalledModules = () => {
     let content = JSON.parse(readFile('package.json'));
     let installedModules = [];
 
-    for (let key in content.dependencies) {
+    for (let key of Object.keys(content.dependencies)) {
         installedModules.push({
             name: key,
             dev: false
         });
     }
-    for (let key in content.devDependencies) {
+    for (let key of Object.keys(content.devDependencies)) {
         installedModules.push({
             name: key,
             dev: true
