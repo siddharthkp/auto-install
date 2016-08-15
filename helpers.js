@@ -200,14 +200,12 @@ let installModule = ({name, dev}) => {
 /* Uninstall module */
 
 let uninstallModule = ({name, dev}) => {
-    let spinner = startSpinner(`Uninstalling ${name}`, 'red');
+    if (dev) return;
 
     let command = `npm uninstall ${name} --save`;
     let message = `${name} removed`;
 
-    if (dev) command += '-dev';
-    if (dev) message += ' from devDependencies';
-
+    let spinner = startSpinner(`Uninstalling ${name}`, 'red');
     runCommand(command);
     stopSpinner(spinner, message, 'red');
 };
