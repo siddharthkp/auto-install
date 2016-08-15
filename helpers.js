@@ -243,6 +243,14 @@ let reinstall = () => {
     stopSpinner(spinner);
 };
 
+/* Does package.json exist?
+ * Without package.json, most of the functionality fails
+ *     installing + adding to package.json
+ *     removing unused modules
+ */
+
+let packageJSONExists = () => fs.existsSync('package.json');
+
 /* Public helper functions */
 
 module.exports = {
@@ -252,6 +260,7 @@ module.exports = {
     installModule,
     uninstallModule,
     diff,
-    reinstall
+    reinstall,
+    packageJSONExists
 };
 

@@ -2,6 +2,7 @@
 
 const helpers = require('./helpers');
 const chokidar = require('chokidar');
+const colors = require('colors');
 
 let watchersInitialized = false;
 let main;
@@ -30,6 +31,12 @@ let initializeWatchers = () => {
  */
 
 main = () => {
+    if (!helpers.packageJSONExists()) {
+        console.log(colors.red('package.json does not exist'));
+        console.log(colors.red('You can create on by using `npm init`'));
+        return;
+    }
+
     let installedModules = [];
     installedModules = helpers.getInstalledModules();
 
