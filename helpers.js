@@ -249,9 +249,7 @@ let reinstall = () => {
  *     removing unused modules
  */
 
-let packageJSONExists = () => {
-    return fs.existsSync('package.json')
-};
+let packageJSONExists = () => fs.existsSync('package.json');
 
 /* Public helper functions */
 
