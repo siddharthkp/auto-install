@@ -87,7 +87,7 @@ let deduplicateSimilarModules = (modules) => {
     let dedupedModuleNames = [];
 
     for (let module of modules) {
-        if (dedupedModuleNames.indexOf(module.name) === -1) {
+        if (!dedupedModuleNames.includes(module.name)) {
             dedupedModules.push(module);
             dedupedModuleNames.push(module.name);
         }
@@ -230,7 +230,7 @@ let getNamesFromModules = (modules) => modules.map(module => module.name);
 
 let diff = (first, second) => {
     let namesFromSecond = getNamesFromModules(second);
-    return first.filter(module => namesFromSecond.indexOf(module.name) < 0);
+    return first.filter(module => !namesFromSecond.includes(module.name));
 };
 
 /* Reinstall modules */
