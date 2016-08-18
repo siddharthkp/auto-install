@@ -4,15 +4,9 @@ const isBuiltInModule = require('is-builtin-module');
 const syncExec = require('sync-exec');
 const ora = require('ora');
 const logSymbols = require('log-symbols');
-const argv = require('yargs').argv;
-const request = require('sync-request');
+const request = require('request');
 const detective = require('detective');
 const colors = require('colors');
-
-/* Secure mode */
-
-let secureMode = false;
-if (argv.secure) secureMode = true;
 
 /* File reader
  * Return contents of given file
@@ -177,11 +171,13 @@ let stopSpinner = (spinner, message, type) => {
 /* Is module popular? - for secure mode */
 
 const POPULARITY_THRESHOLD = 10000;
-let isModulePopular = (name) => {
+let isModulePopular = (name, callback) => {
+    let spinner = startSpinner(`Checking ${name}`, 'yellow');
     let url = `https://api.npmjs.org/downloads/point/last-month/${name}`;
-    request('GET', url, (error, response, body) => {
+    request(url, (error, response, body) => {
+        stopSpinner(spinner);
         let downloads = JSON.parse(body).downloads;
-        return (downloads > POPULARITY_THRESHOLD);
+        callback(downloads > POPULARITY_THRESHOLD);
     });
 };
 
@@ -191,10 +187,6 @@ let isModulePopular = (name) => {
 
 let installModule = ({name, dev}) => {
     let spinner = startSpinner(`Installing ${name}`, 'green');
-    if (secureMode && !isModulePopular(name)) {
-        stopSpinner(spinner, `${name} not trusted`, 'yellow');
-        return;
-    }
 
     let command = `npm install ${name} --save`;
     let message = `${name} installed`;
@@ -205,6 +197,17 @@ let installModule = ({name, dev}) => {
     let success = runCommand(command);
     if (success) stopSpinner(spinner, message, 'green');
     else stopSpinner(spinner, `${name} installation failed`, 'yellow');
+};
+
+/* Install module if trusted
+ * Call isModulePopular before installing
+ */
+
+let installModuleIfTrusted = ({name, dev}) => {
+    isModulePopular(name, (popular) => {
+        if (popular) installModule({name, dev});
+        else console.log(colors.red(`${name} not trusted`));
+    });
 };
 
 /* Uninstall module */
