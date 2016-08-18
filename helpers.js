@@ -133,8 +133,10 @@ let getUsedModules = () => {
  * Pretty error message for common errors
  */
 
-let handleError = (err) {
-    console.log(colors.red(response.stderr));
+let handleError = (err) => {
+    if (err.includes('E404')) {
+        console.log(colors.red('Module is not in the npm registry.'));
+    } else console.log(colors.red(err));
 };
 
 /* Command runner
