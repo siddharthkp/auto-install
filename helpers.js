@@ -236,7 +236,7 @@ let removeBuiltInModules = (modules) => modules.filter((module) => !isBuiltInMod
 
 /* Remove local files that are required */
 
-let removeLocalFiles = (modules) => modules.filter((module) => (module.name.indexOf('./') !== 0));
+let removeLocalFiles = (modules) => modules.filter((module) => !module.name.includes('./'));
 
 /* Filter registry modules */
 
