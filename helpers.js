@@ -68,9 +68,10 @@ let isValidModule = ({name}) => {
 let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
     let modules = detective(content);
+
     let es6modules = es6detective(content);
     modules = modules.concat(es6modules);
-    // TODO: Logic for filtering local files?
+
     modules = modules.filter((module) => isValidModule(module));
     return modules;
 };
