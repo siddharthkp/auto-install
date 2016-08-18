@@ -249,13 +249,11 @@ let removeFilePaths = (modules) => {
 
 /* Filter registry modules */
 
-let filterRegistryModules = (modules) => {
-    return removeBuiltInModules(
-        removeFilePaths(
-        removeLocalFiles(
-            modules
-        )));
-};
+let filterRegistryModules = (modules) => removeBuiltInModules(
+    removeFilePaths(
+    removeLocalFiles(
+        modules
+    )));
 
 /* Get module names from array of module objects */
 
