@@ -2,7 +2,7 @@
 
 [![Build
 Status](https://travis-ci.org/siddharthkp/auto-install.svg)](https://travis-ci.org/siddharthkp/auto-install)
-[![npm](https://img.shields.io/npm/dm/auto-install.svg?maxAge=2592000)](https://www.npmjs.com/package/auto-install)
+[![npm](https://img.shields.io/npm/dm/auto-install.svg?maxAge=3600)](https://www.npmjs.com/package/auto-install)
 
 Auto installs dependencies as you code. Just hit save.
 
