@@ -7,6 +7,7 @@ const logSymbols = require('log-symbols');
 const request = require('request');
 const detective = require('detective');
 const colors = require('colors');
+const argv = require('yargs').argv;
 
 /* File reader
  * Return contents of given file
@@ -200,6 +201,8 @@ let installModule = ({name, dev}) => {
 
     if (dev) command += '-dev';
     if (dev) message += ' in devDependencies';
+
+    if (argv.exact) command += ' --save-exact';
 
     let success = runCommand(command);
     if (success) stopSpinner(spinner, message, 'green');
