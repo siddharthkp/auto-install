@@ -129,6 +129,14 @@ let getUsedModules = () => {
     return usedModules;
 };
 
+/* Handle error
+ * Pretty error message for common errors
+ */
+
+let handleError = (err) {
+    console.log(colors.red(response.stderr));
+};
+
 /* Command runner
  * Run a given command
  */
@@ -137,7 +145,7 @@ let runCommand = (command) => {
     let response = syncExec(command);
     if (response.stderr) {
         console.log();
-        console.log(colors.red(response.stderr));
+        handleError(response.stderr);
     }
     return !response.status; // status = 0 for success
 };
