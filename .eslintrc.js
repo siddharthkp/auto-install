@@ -1,7 +1,7 @@
 module.exports = {
     'extends': 'airbnb',
     'rules': {
-        'no-console': 'off',
+        'no-console': 0,
         'indent': ['error', 4],
         'prefer-const': 'off',
         'comma-dangle': ['error', 'never'],
