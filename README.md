@@ -23,7 +23,7 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 `--secure`  Install popular modules only (> 10k downloads in the last month)
 
-`--exact`   Installs exact version similar to `npm install express --save-exact`
+`--exact`   Install exact version similar to `npm install express --save-exact`
 
 #### Show your support
 
