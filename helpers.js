@@ -176,8 +176,12 @@ let isModulePopular = (name, callback) => {
     let url = `https://api.npmjs.org/downloads/point/last-month/${name}`;
     request(url, (error, response, body) => {
         stopSpinner(spinner);
-        let downloads = JSON.parse(body).downloads;
-        callback(downloads > POPULARITY_THRESHOLD);
+        if (error && error.code === 'ENOTFOUND') {
+            console.log(colors.red('Could not connect to npm, check your internet connection!'));
+        } else {
+            let downloads = JSON.parse(body).downloads;
+            callback(downloads > POPULARITY_THRESHOLD);
+        }
     });
 };
 
