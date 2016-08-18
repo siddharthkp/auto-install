@@ -130,6 +130,8 @@ let getUsedModules = () => {
 let handleError = (err) => {
     if (err.includes('E404')) {
         console.log(colors.red('Module is not in the npm registry.'));
+    } else if (err.includes('ENOTFOUND')) {
+        console.log(colors.red('Could not connect to npm, check your internet connection!'));
     } else console.log(colors.red(err));
 };
 
