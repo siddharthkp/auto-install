@@ -1,6 +1,6 @@
 {
   "name": "auto-install",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Auto installs dependencies as you code",
   "keywords": "auto, dependencies, install, package, watch",
   "homepage": "https://github.com/siddharthkp/auto-install#readme",
@@ -19,6 +19,7 @@
     "chokidar": "1.6.0",
     "colors": "1.1.2",
     "detective": "4.3.1",
+    "detective-es6": "1.1.5",
     "glob": "7.0.5",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",

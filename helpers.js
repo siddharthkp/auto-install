@@ -7,6 +7,7 @@ const logSymbols = require('log-symbols');
 const argv = require('yargs').argv;
 const request = require('sync-request');
 const detective = require('detective');
+const es6detective = require('detective-es6');
 const colors = require('colors');
 
 /* Secure mode */
@@ -67,6 +68,9 @@ let isValidModule = ({name}) => {
 let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
     let modules = detective(content);
+    let es6modules = es6detective(content);
+    modules = modules.concat(es6modules);
+    // TODO: Logic for filtering local files?
     modules = modules.filter((module) => isValidModule(module));
     return modules;
 };
