@@ -20,6 +20,8 @@ Secure mode: `auto-install --secure` Install popular modules only (> 10k downloa
 
 Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
+Exact mode: `auto-install --exact` similar to `npm install express --save-exact`
+
 #### Show your support
 
 :star: this repo
