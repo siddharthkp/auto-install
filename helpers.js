@@ -245,7 +245,7 @@ let diff = (first, second) => {
 
 /* Reinstall modules */
 
-let reinstall = () => {
+let cleanup = () => {
     let spinner = startSpinner('Cleaning up', 'green');
     runCommand('npm install');
     stopSpinner(spinner);
@@ -266,9 +266,10 @@ module.exports = {
     getUsedModules,
     filterRegistryModules,
     installModule,
+    installModuleIfTrusted,
     uninstallModule,
     diff,
-    reinstall,
+    cleanup,
     packageJSONExists
 };
 
