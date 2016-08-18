@@ -238,9 +238,18 @@ let removeBuiltInModules = (modules) => modules.filter((module) => !isBuiltInMod
 
 let removeLocalFiles = (modules) => modules.filter((module) => !module.name.includes('./'));
 
+/* Remove file paths from module names
+ * Example: convert `colors/safe` to `colors`
+ */
+
+let removeFilePaths = (modules) => {
+    for (let module of modules) module.name = module.name.split('/')[0];
+    return modules;
+};
+
 /* Filter registry modules */
 
-let filterRegistryModules = (modules) => removeBuiltInModules(removeLocalFiles(modules));
+let filterRegistryModules = (modules) => removeBuiltInModules(removeFilePaths(removeLocalFiles(modules)));
 
 /* Get module names from array of module objects */
 
