@@ -10,7 +10,7 @@
   "bin": "src/index.js",
   "author": "siddharthkp",
   "scripts": {
-    "test": "node node_modules/eslint/bin/eslint.js ."
+    "test": "node node_modules/eslint/bin/eslint.js src/ && cd test && node ../node_modules/.bin/mocha ."
   },
   "engines": {
     "node": ">= 4.4.5"
@@ -28,10 +28,12 @@
     "yargs": "4.8.1"
   },
   "devDependencies": {
+    "chai": "3.5.0",
     "eslint": "3.3.0",
     "eslint-config-airbnb": "10.0.1",
     "eslint-plugin-import": "1.13.0",
     "eslint-plugin-jsx-a11y": "2.1.0",
-    "eslint-plugin-react": "6.1.0"
+    "eslint-plugin-react": "6.1.0",
+    "mocha": "3.0.2"
   }
 }
