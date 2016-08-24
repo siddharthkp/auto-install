@@ -246,7 +246,10 @@ let removeLocalFiles = (modules) => modules.filter((module) => !module.name.incl
  */
 
 let removeFilePaths = (modules) => {
-    for (let module of modules) module.name = module.name.split('/')[0];
+    for (let module of modules) {
+        var slicedName = module.name.split('/')[0];
+        if (slicedName.substr(0,1) !== '@') module.name = slicedName;
+    }
     return modules;
 };
 
