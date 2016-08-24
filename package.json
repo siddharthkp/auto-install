@@ -6,8 +6,8 @@
   "homepage": "https://github.com/siddharthkp/auto-install#readme",
   "repository": "siddharthkp/auto-install",
   "license": "MIT",
-  "main": "index.js",
-  "bin": "index.js",
+  "main": "src/index.js",
+  "bin": "src/index.js",
   "author": "siddharthkp",
   "scripts": {
     "test": "node node_modules/eslint/bin/eslint.js ."
