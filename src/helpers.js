@@ -8,6 +8,7 @@ const request = require('request');
 const detective = require('detective');
 const colors = require('colors');
 const argv = require('yargs').argv;
+const packageJson = require('package-json');
 
 /* File reader
  * Return contents of given file
@@ -209,6 +210,16 @@ let installModule = ({name, dev}) => {
     else stopSpinner(spinner, `${name} installation failed`, 'yellow');
 };
 
+/* Install module if author is trusted */
+
+let installModuleIfTrustedAuthor = ({name, dev}) => {
+    let trustedAuthor = argv['trust-author'];
+    packageJson(name).then(json => {
+        if (json.author && json.author.name === trustedAuthor) installModule({name, dev});
+        else console.log(colors.red(`${name} not trusted`));
+    });
+};
+
 /* Install module if trusted
  * Call isModulePopular before installing
  */
@@ -216,6 +227,7 @@ let installModule = ({name, dev}) => {
 let installModuleIfTrusted = ({name, dev}) => {
     isModulePopular(name, (popular) => {
         if (popular) installModule({name, dev});
+        else if (argv['trust-author']) installModuleIfTrustedAuthor({name, dev});
         else console.log(colors.red(`${name} not trusted`));
     });
 };
