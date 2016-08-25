@@ -39,7 +39,7 @@ let initializeWatchers = () => {
 main = () => {
     if (!helpers.packageJSONExists()) {
         console.log(colors.red('package.json does not exist'));
-        console.log(colors.red('You can create on by using `npm init`'));
+        console.log(colors.red('You can create one by using `npm init`'));
         return;
     }
 
