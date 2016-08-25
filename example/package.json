@@ -1,0 +1,17 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "main": "diff.test.js",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "description": "This is just for test purposes",
+  "dependencies": {
+    "sync-exec": "0.6.2",
+    "yargs": "4.8.1"
+  },
+  "devDependencies": {
+    "mocha": "3.0.2"
+  }
+
+}

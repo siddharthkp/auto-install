@@ -2,7 +2,9 @@
 
 [![Build
 Status](https://travis-ci.org/siddharthkp/auto-install.svg)](https://travis-ci.org/siddharthkp/auto-install)
-[![npm](https://img.shields.io/npm/dm/auto-install.svg?maxAge=2592000)](https://www.npmjs.com/package/auto-install)
+[![npm](https://img.shields.io/npm/v/auto-install.svg?maxAge=3600)](https://www.npmjs.com/package/auto-install)
+[![npm](https://img.shields.io/npm/dm/auto-install.svg?maxAge=3600)](https://www.npmjs.com/package/auto-install)
+[![Known Vulnerabilities](https://snyk.io/test/npm/auto-install/badge.svg)](https://snyk.io/test/npm/auto-install)
 
 Auto installs dependencies as you code. Just hit save.
 
@@ -16,9 +18,13 @@ Auto installs dependencies as you code. Just hit save.
 
 Run `auto-install` in the directory you are working in
 
-Secure mode: `auto-install --secure` Install popular modules only (> 10k downloads in the last month)
-
 Modules in `.spec.js` and `.test.js` are added to `devDependencies`
+
+#### Options
+
+`--secure`  Install popular modules only (> 10k downloads in the last month)
+
+`--exact`   Install exact version similar to `npm install express --save-exact`
 
 #### Show your support
 

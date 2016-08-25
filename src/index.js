@@ -3,9 +3,15 @@
 const helpers = require('./helpers');
 const chokidar = require('chokidar');
 const colors = require('colors');
+const argv = require('yargs').argv;
 
 let watchersInitialized = false;
 let main;
+
+/* Secure mode */
+
+let secureMode = false;
+if (argv.secure) secureMode = true;
 
 /* Watch files and repeat drill
  * Add a watcher, call main wrapper to repeat cycle
@@ -43,16 +49,20 @@ main = () => {
     let usedModules = helpers.getUsedModules();
     usedModules = helpers.filterRegistryModules(usedModules);
 
-    // installModules
-    let modulesNotInstalled = helpers.diff(usedModules, installedModules);
-    for (let module of modulesNotInstalled) helpers.installModule(module);
-
     // removeUnusedModules
 
     let unusedModules = helpers.diff(installedModules, usedModules);
     for (let module of unusedModules) helpers.uninstallModule(module);
 
-    helpers.reinstall();
+    // installModules
+
+    let modulesNotInstalled = helpers.diff(usedModules, installedModules);
+    for (let module of modulesNotInstalled) {
+        if (secureMode) helpers.installModuleIfTrusted(module);
+        else helpers.installModule(module);
+    }
+
+    helpers.cleanup();
     if (!watchersInitialized) initializeWatchers();
 };
 
