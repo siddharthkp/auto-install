@@ -7,10 +7,10 @@
   "license": "MIT",
   "description": "This is just for test purposes",
   "dependencies": {
+    "sync-exec": "0.6.2",
     "yargs": "4.8.1"
   },
   "devDependencies": {
-    "sync-exec": "0.6.2",
     "mocha": "3.0.2"
   }
 

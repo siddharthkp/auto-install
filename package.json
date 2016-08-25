@@ -10,7 +10,7 @@
   "bin": "src/index.js",
   "author": "siddharthkp",
   "scripts": {
-    "test": "node node_modules/eslint/bin/eslint.js src/ && cd test && node ../node_modules/.bin/mocha ."
+    "test": "node node_modules/eslint/bin/eslint.js src/ && cd example && node ../node_modules/.bin/mocha ../test"
   },
   "engines": {
     "node": ">= 4.4.5"
