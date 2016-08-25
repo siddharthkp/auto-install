@@ -16,7 +16,7 @@ Auto installs dependencies as you code. Just hit save.
 
 #### Usage
 
-Run `auto-install` in the directory you are working in
+Run `auto-install` in the directory you are working in.
 
 Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
@@ -25,6 +25,8 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 `--secure`  Install popular modules only (> 10k downloads in the last month)
 
 `--exact`   Install exact version similar to `npm install express --save-exact`
+
+`--dont-uninstall`   Do not uninstall unused modules
 
 #### Show your support
 
