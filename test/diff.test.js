@@ -8,7 +8,6 @@ describe('diff', () => {
     usedModules = helpers.filterRegistryModules(usedModules);
     let unusedModules = helpers.diff(installedModules, usedModules);
     let modulesNotInstalled = helpers.diff(usedModules, installedModules);
-    console.log(modulesNotInstalled);
     it('should return unusedModules', () => {
         unusedModules.should.deep.equal(testData.unusedModules);
     });

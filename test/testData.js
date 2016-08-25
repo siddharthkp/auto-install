@@ -1,31 +1,31 @@
 let installedModules = [
+    {name: 'sync-exec', dev: false},
     {name: 'yargs', dev: false},
-    {name: 'sync-exec', dev: true},
     {name: 'mocha', dev: true}
 ];
 
 let usedModules = [
     {name: 'chai', dev: true},
-    {name: '../src/helpers', dev: true},
-    {name: './testData.js', dev: true},
-    {name: 'sync-exec', dev: true}
+    {name: 'chokidar', dev: false},
+    {name: 'yargs', dev: false},
+    {name: 'fs', dev: false},
+    {name: '../src/helpers', dev: false}
 ];
 
 let unusedModules = [
-    /* Not actually unused
-     * lint + test modules are assumed to be unused
-     */
-    {name: 'yargs', dev: false},
+    {name: 'sync-exec', dev: false},
     {name: 'mocha', dev: true}
 ];
 
 let modulesNotInstalled = [
-    {name: 'chai', dev: true}
+    {name: 'chai', dev: true},
+    {name: 'chokidar', dev: false}
 ];
 
 let filteredUsedModules = [
     {name: 'chai', dev: true},
-    {name: 'sync-exec', dev: true}
+    {name: 'chokidar', dev: false},
+    {name: 'yargs', dev: false}
 ];
 
 module.exports = {
