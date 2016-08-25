@@ -63,8 +63,13 @@ let isValidModule = ({name}) => {
 
 let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
-    let modules = detective(content);
-    modules = modules.filter((module) => isValidModule(module));
+    let modules = [];
+    try {
+        modules = detective(content);
+        modules = modules.filter((module) => isValidModule(module));
+    } catch (err) {
+        console.log(colors.red(`Could not parse ${path}. There is a syntax error in file`));
+    }
     return modules;
 };
 
