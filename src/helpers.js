@@ -215,6 +215,10 @@ let installModule = ({name, dev}) => {
     else stopSpinner(spinner, `${name} installation failed`, 'yellow');
 };
 
+/* is scoped module? */
+
+let isScopedModule = (name) => name[0] === '@';
+
 /* Install module if author is trusted */
 
 let installModuleIfTrustedAuthor = ({name, dev}) => {
@@ -230,11 +234,18 @@ let installModuleIfTrustedAuthor = ({name, dev}) => {
  */
 
 let installModuleIfTrusted = ({name, dev}) => {
-    isModulePopular(name, (popular) => {
-        if (popular) installModule({name, dev});
-        else if (argv['trust-author']) installModuleIfTrustedAuthor({name, dev});
-        else console.log(colors.red(`${name} not trusted`));
-    });
+    // Trust scoped modules
+    if (isScopedModule(name)) installModule({name, dev});
+    else {
+        isModulePopular(name, (popular) => {
+            // Popular as proxy for trusted
+            if (popular) installModule({name, dev});
+            // Trusted Author
+            else if (argv['trust-author']) installModuleIfTrustedAuthor({name, dev});
+            // Not trusted
+            else console.log(colors.red(`${name} not trusted`));
+        });
+    }
 };
 
 /* Uninstall module */
