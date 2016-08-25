@@ -1,6 +1,6 @@
 require('chai').should();
 const helpers = require('../src/helpers');
-const testData = require('./testdata.js');
+const testData = require('./testData.js');
 
 describe('diff', () => {
     let installedModules = helpers.getInstalledModules();

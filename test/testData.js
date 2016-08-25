@@ -7,7 +7,7 @@ let installedModules = [
 let usedModules = [
     {name: 'chai', dev: true},
     {name: '../src/helpers', dev: true},
-    {name: './testdata.js', dev: true},
+    {name: './testData.js', dev: true},
     {name: 'sync-exec', dev: true}
 ];
 
