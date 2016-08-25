@@ -10,3 +10,6 @@ const fs = require('fs');
 // Require files
 const helpers = require('../src/helpers');
 
+// Require scoped modules
+const autoInstall = require('@siddharthkp/auto-install');
+

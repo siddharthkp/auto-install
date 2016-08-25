@@ -9,7 +9,8 @@ let usedModules = [
     {name: 'chokidar', dev: false},
     {name: 'yargs', dev: false},
     {name: 'fs', dev: false},
-    {name: '../src/helpers', dev: false}
+    {name: '../src/helpers', dev: false},
+    {name: '@siddharthkp/auto-install', dev: false}
 ];
 
 let unusedModules = [
@@ -19,13 +20,15 @@ let unusedModules = [
 
 let modulesNotInstalled = [
     {name: 'chai', dev: true},
-    {name: 'chokidar', dev: false}
+    {name: 'chokidar', dev: false},
+    {name: '@siddharthkp/auto-install', dev: false}
 ];
 
 let filteredUsedModules = [
     {name: 'chai', dev: true},
     {name: 'chokidar', dev: false},
-    {name: 'yargs', dev: false}
+    {name: 'yargs', dev: false},
+    {name: '@siddharthkp/auto-install', dev: false}
 ];
 
 module.exports = {
