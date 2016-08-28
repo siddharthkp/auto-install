@@ -10,7 +10,8 @@
   "bin": "src/index.js",
   "author": "siddharthkp",
   "scripts": {
-    "test": "node node_modules/eslint/bin/eslint.js src/ && cd example && node ../node_modules/.bin/mocha ../test"
+    "test": "node node_modules/eslint/bin/eslint.js src/ && cd example && node ../node_modules/.bin/mocha ../test",
+    "build": "babel src -d lib"
   },
   "engines": {
     "node": ">= 4.4.5"
@@ -29,6 +30,8 @@
     "yargs": "5.0.0"
   },
   "devDependencies": {
+    "babel-cli": "6.14.0",
+    "babel-preset-es2015": "6.14.0",
     "chai": "3.5.0",
     "eslint": "3.4.0",
     "eslint-config-airbnb": "10.0.1",
