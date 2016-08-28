@@ -1,13 +1,13 @@
 {
   "name": "auto-install",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Auto installs dependencies as you code",
   "keywords": "auto, dependencies, install, package, watch",
   "homepage": "https://github.com/siddharthkp/auto-install#readme",
   "repository": "siddharthkp/auto-install",
   "license": "MIT",
   "main": "src/index.js",
-  "bin": "src/index.js",
+  "bin": "lib/index.js",
   "author": "siddharthkp",
   "scripts": {
     "lint": "node node_modules/eslint/bin/eslint.js src",
