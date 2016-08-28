@@ -9,6 +9,7 @@ const detective = require('detective');
 const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
+require('./includes-polyfill');
 
 /* File reader
  * Return contents of given file
