@@ -1,5 +1,5 @@
 require('chai').should();
-const helpers = require('../src/helpers');
+const helpers = require('../lib/helpers');
 const syncExec = require('sync-exec');
 
 describe('packageJSONExists', () => {

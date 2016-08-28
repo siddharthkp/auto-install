@@ -1,5 +1,5 @@
 require('chai').should();
-const helpers = require('../src/helpers');
+const helpers = require('../lib/helpers');
 const testData = require('./testData.js');
 
 describe('getUsedModules', () => {
