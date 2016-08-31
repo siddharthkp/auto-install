@@ -13,6 +13,9 @@ let main;
 let secureMode = false;
 if (argv.secure) secureMode = true;
 
+let uninstallMode = true;
+if (argv['dont-uninstall']) uninstallMode = false;
+
 /* Watch files and repeat drill
  * Add a watcher, call main wrapper to repeat cycle
  */
@@ -39,7 +42,7 @@ let initializeWatchers = () => {
 main = () => {
     if (!helpers.packageJSONExists()) {
         console.log(colors.red('package.json does not exist'));
-        console.log(colors.red('You can create on by using `npm init`'));
+        console.log(colors.red('You can create one by using `npm init`'));
         return;
     }
 
@@ -51,8 +54,10 @@ main = () => {
 
     // removeUnusedModules
 
-    let unusedModules = helpers.diff(installedModules, usedModules);
-    for (let module of unusedModules) helpers.uninstallModule(module);
+    if (uninstallMode) {
+        let unusedModules = helpers.diff(installedModules, usedModules);
+        for (let module of unusedModules) helpers.uninstallModule(module);
+    }
 
     // installModules
 

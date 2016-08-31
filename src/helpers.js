@@ -9,6 +9,8 @@ const detective = require('detective');
 const es6detective = require('detective-es6');
 const colors = require('colors');
 const argv = require('yargs').argv;
+const packageJson = require('package-json');
+require('./includes-polyfill');
 
 /* File reader
  * Return contents of given file
@@ -63,12 +65,17 @@ let isValidModule = ({name}) => {
 
 let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
-    let modules = detective(content);
+    let modules = [];
+    try {
+        modules = detective(content);
 
-    let es6modules = es6detective(content);
-    modules = modules.concat(es6modules);
+        let es6modules = es6detective(content);
+        modules = modules.concat(es6modules);
 
-    modules = modules.filter((module) => isValidModule(module));
+        modules = modules.filter((module) => isValidModule(module));
+    } catch (err) {
+        console.log(colors.red(`Could not parse ${path}. There is a syntax error in file`));
+    }
     return modules;
 };
 
@@ -214,15 +221,37 @@ let installModule = ({name, dev}) => {
     else stopSpinner(spinner, `${name} installation failed`, 'yellow');
 };
 
+/* is scoped module? */
+
+let isScopedModule = (name) => name[0] === '@';
+
+/* Install module if author is trusted */
+
+let installModuleIfTrustedAuthor = ({name, dev}) => {
+    let trustedAuthor = argv['trust-author'];
+    packageJson(name).then(json => {
+        if (json.author && json.author.name === trustedAuthor) installModule({name, dev});
+        else console.log(colors.red(`${name} not trusted`));
+    });
+};
+
 /* Install module if trusted
  * Call isModulePopular before installing
  */
 
 let installModuleIfTrusted = ({name, dev}) => {
-    isModulePopular(name, (popular) => {
-        if (popular) installModule({name, dev});
-        else console.log(colors.red(`${name} not trusted`));
-    });
+    // Trust scoped modules
+    if (isScopedModule(name)) installModule({name, dev});
+    else {
+        isModulePopular(name, (popular) => {
+            // Popular as proxy for trusted
+            if (popular) installModule({name, dev});
+            // Trusted Author
+            else if (argv['trust-author']) installModuleIfTrustedAuthor({name, dev});
+            // Not trusted
+            else console.log(colors.red(`${name} not trusted`));
+        });
+    }
 };
 
 /* Uninstall module */

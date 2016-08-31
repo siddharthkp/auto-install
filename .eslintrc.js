@@ -5,6 +5,9 @@ module.exports = {
         'indent': ['error', 4],
         'prefer-const': 'off',
         'comma-dangle': ['error', 'never'],
-        'object-curly-spacing': ['error', 'never']
+        'object-curly-spacing': ['error', 'never'],
+        'no-extend-native': 'off',
+        'no-self-compare': 'off',
+        'prefer-rest-params': 'off'
     }
 };
