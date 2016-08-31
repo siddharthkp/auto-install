@@ -10,6 +10,8 @@ Auto installs dependencies as you code. Just hit save.
 
 ![Auto installs dependencies as you code](https://dl.dropboxusercontent.com/u/23355164/auto-install.gif)
 
+Featured in [npm weekly #56](http://us9.campaign-archive2.com/?u=077dfd41302a71310cef619e5&id=9e020606f1)!
+
 #### Install
 
 `npm install -g auto-install`
