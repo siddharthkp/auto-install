@@ -1,7 +1,7 @@
 #### auto-install
 
 [![Build
-Status](https://travis-ci.org/siddharthkp/auto-install.svg)](https://travis-ci.org/siddharthkp/auto-install)
+Status](https://api.travis-ci.org/siddharthkp/auto-install.svg?branch=master)](https://travis-ci.org/siddharthkp/auto-install)
 [![npm](https://img.shields.io/npm/v/auto-install.svg?maxAge=3600)](https://www.npmjs.com/package/auto-install)
 [![npm](https://img.shields.io/npm/dm/auto-install.svg?maxAge=3600)](https://www.npmjs.com/package/auto-install)
 [![Known Vulnerabilities](https://snyk.io/test/npm/auto-install/badge.svg)](https://snyk.io/test/npm/auto-install)
