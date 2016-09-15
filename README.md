@@ -38,6 +38,8 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 [Does it protect against typosquatting?](https://github.com/siddharthkp/auto-install/issues/6)
 
+[Hackernews post](https://news.ycombinator.com/item?id=12248997)
+
 #### License
 
 MIT © [siddharthkp](https://github.com/siddharthkp)
