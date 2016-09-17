@@ -27,7 +27,7 @@
     "log-symbols": "1.0.2",
     "ora": "0.3.0",
     "package-json": "2.4.0",
-    "request": "2.74.0",
+    "request": "2.75.0",
     "sync-exec": "0.6.2",
     "yargs": "5.0.0"
   },
