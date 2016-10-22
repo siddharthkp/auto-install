@@ -21,7 +21,7 @@
   "dependencies": {
     "chokidar": "1.6.1",
     "colors": "1.1.2",
-    "detective": "4.3.1",
+    "detective": "4.3.2",
     "glob": "7.1.0",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",
