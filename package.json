@@ -29,7 +29,7 @@
     "package-json": "2.4.0",
     "request": "2.74.0",
     "sync-exec": "0.6.2",
-    "yargs": "6.1.1"
+    "yargs": "6.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
