@@ -19,29 +19,29 @@
     "node": ">= 4.4.5"
   },
   "dependencies": {
-    "chokidar": "1.6.0",
+    "chokidar": "1.6.1",
     "colors": "1.1.2",
-    "detective": "4.3.1",
+    "detective": "4.3.2",
     "detective-es6": "1.1.5",
-    "glob": "7.0.6",
+    "glob": "7.1.0",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",
     "ora": "0.3.0",
     "package-json": "2.4.0",
     "request": "2.74.0",
     "sync-exec": "0.6.2",
-    "yargs": "5.0.0"
+    "yargs": "6.3.0"
   },
   "devDependencies": {
-    "babel-cli": "6.14.0",
-    "babel-preset-es2015": "6.14.0",
-    "chai": "3.5.0",
-    "eslint": "3.4.0",
-    "eslint-config-airbnb": "10.0.1",
-    "eslint-plugin-import": "1.14.0",
-    "eslint-plugin-jsx-a11y": "2.2.0",
-    "eslint-plugin-react": "6.1.2",
-    "mocha": "3.0.2"
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.5.0",
+    "eslint-config-airbnb": "^11.1.0",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-react": "^6.2.2",
+    "mocha": "^3.0.2"
   },
   "babel": {
     "presets": ["es2015"]
