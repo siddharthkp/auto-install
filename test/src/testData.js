@@ -11,7 +11,7 @@ let usedModules = [
     {name: 'fs', dev: false},
     {name: '../src/helpers', dev: false},
     {name: '@siddharthkp/auto-install', dev: false},
-    {name: 'lodash', dev: false}
+    {name: 'lodash/memoize', dev: false}
 ];
 
 let unusedModules = [

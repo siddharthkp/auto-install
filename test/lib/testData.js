@@ -2,7 +2,7 @@
 
 var installedModules = [{ name: 'sync-exec', dev: false }, { name: 'yargs', dev: false }, { name: 'mocha', dev: true }];
 
-var usedModules = [{ name: 'chai', dev: true }, { name: 'chokidar', dev: false }, { name: 'yargs', dev: false }, { name: 'fs', dev: false }, { name: '../src/helpers', dev: false }, { name: '@siddharthkp/auto-install', dev: false }, { name: 'lodash', dev: false }];
+var usedModules = [{ name: 'chai', dev: true }, { name: 'chokidar', dev: false }, { name: 'yargs', dev: false }, { name: 'fs', dev: false }, { name: '../src/helpers', dev: false }, { name: '@siddharthkp/auto-install', dev: false }, { name: 'lodash/memoize', dev: false }];
 
 var unusedModules = [{ name: 'sync-exec', dev: false }, { name: 'mocha', dev: true }];
 
