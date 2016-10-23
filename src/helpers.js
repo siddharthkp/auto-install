@@ -201,6 +201,29 @@ let isModulePopular = (name, callback) => {
     });
 };
 
+/* Get install command
+ *
+ * Depends on package manager, dev and exact
+ */
+
+let getInstallCommand = (name, dev) => {
+    let packageManager = 'npm';
+    if (argv.yarn) packageManager = 'yarn';
+
+    let command;
+
+    if (packageManager === 'npm') {
+        command = `npm install ${name} --save`;
+        if (dev) command += '-dev';
+        if (argv.exact) command += ' --save-exact';
+    } else if (packageManager === 'yarn') {
+        command = `yarn add ${name}`;
+        if (dev) command += ' --dev';
+        // yarn always adds exact
+    }
+    return command;
+};
+
 /* Install module
  * Install given module
  */
@@ -208,13 +231,10 @@ let isModulePopular = (name, callback) => {
 let installModule = ({name, dev}) => {
     let spinner = startSpinner(`Installing ${name}`, 'green');
 
-    let command = `npm install ${name} --save`;
+    let command = getInstallCommand(name, dev);
+
     let message = `${name} installed`;
-
-    if (dev) command += '-dev';
     if (dev) message += ' in devDependencies';
-
-    if (argv.exact) command += ' --save-exact';
 
     let success = runCommand(command);
     if (success) stopSpinner(spinner, message, 'green');
@@ -254,12 +274,29 @@ let installModuleIfTrusted = ({name, dev}) => {
     }
 };
 
+/* Get uninstall command
+ *
+ * Depends on package manager
+ */
+
+let getUninstallCommand = (name) => {
+    let packageManager = 'npm';
+    if (argv.yarn) packageManager = 'yarn';
+
+    let command;
+
+    if (packageManager === 'npm') command = `npm uninstall ${name} --save`;
+    else if (packageManager === 'yarn') command = `yarn remove ${name}`;
+
+    return command;
+};
+
 /* Uninstall module */
 
 let uninstallModule = ({name, dev}) => {
     if (dev) return;
 
-    let command = `npm uninstall ${name} --save`;
+    let command = getUninstallCommand(name);
     let message = `${name} removed`;
 
     let spinner = startSpinner(`Uninstalling ${name}`, 'red');
@@ -310,7 +347,8 @@ let diff = (first, second) => {
 
 let cleanup = () => {
     let spinner = startSpinner('Cleaning up', 'green');
-    runCommand('npm install');
+    if (argv.yarn) runCommand('yarn');
+    else runCommand('npm install');
     stopSpinner(spinner);
 };
 
