@@ -6,6 +6,7 @@ const ora = require('ora');
 const logSymbols = require('log-symbols');
 const request = require('request');
 const detective = require('detective');
+const es6detective = require('detective-es6');
 const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
@@ -67,6 +68,10 @@ let getModulesFromFile = (path) => {
     let modules = [];
     try {
         modules = detective(content);
+
+        let es6modules = es6detective(content);
+        modules = modules.concat(es6modules);
+
         modules = modules.filter((module) => isValidModule(module));
     } catch (err) {
         console.log(colors.red(`Could not parse ${path}. There is a syntax error in file`));

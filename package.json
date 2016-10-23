@@ -1,6 +1,6 @@
 {
   "name": "auto-install",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Auto installs dependencies as you code",
   "keywords": "auto, dependencies, install, package, watch",
   "homepage": "https://github.com/siddharthkp/auto-install#readme",
@@ -22,6 +22,7 @@
     "chokidar": "1.6.1",
     "colors": "1.1.2",
     "detective": "4.3.2",
+    "detective-es6": "1.1.5",
     "glob": "7.1.0",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",
@@ -35,14 +36,15 @@
     "babel-cli": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
     "chai": "^3.5.0",
-    "eslint": "^3.5.0",
-    "eslint-config-airbnb": "^11.1.0",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.2",
-    "eslint-plugin-react": "^6.2.2",
-    "mocha": "^3.0.2"
+    "eslint": "3.8.1",
+    "eslint-config-airbnb": "12.0.0",
+    "eslint-plugin-import": "1.16.0",
+    "eslint-plugin-jsx-a11y": "2.2.3",
+    "eslint-plugin-react": "6.4.1"
   },
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ]
   }
 }
