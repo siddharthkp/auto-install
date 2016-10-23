@@ -30,6 +30,8 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 `--dont-uninstall`   Do not uninstall unused modules
 
+`--yarn`    Use [yarn](https://yarnpkg.com) instead of npm
+
 #### Show your support
 
 :star: this repo
