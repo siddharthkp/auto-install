@@ -12,7 +12,7 @@
   "scripts": {
     "lint": "node node_modules/eslint/bin/eslint.js src",
     "build": "babel src -d lib && babel test/src -d test/lib",
-    "run-tests": "cd example && node ../node_modules/.bin/mocha ../test/lib",
+    "run-tests": "cd example && mocha ../test/lib",
     "test": "npm run lint && npm run build && npm run run-tests"
   },
   "engines": {
@@ -26,7 +26,6 @@
     "glob": "7.1.0",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",
-    "mocha": "3.1.2",
     "ora": "0.3.0",
     "package-json": "2.4.0",
     "request": "2.74.0",
@@ -41,7 +40,8 @@
     "eslint-config-airbnb": "12.0.0",
     "eslint-plugin-import": "1.16.0",
     "eslint-plugin-jsx-a11y": "2.2.3",
-    "eslint-plugin-react": "6.4.1"
+    "eslint-plugin-react": "6.4.1",
+    "mocha": "3.1.2"
   },
   "babel": {
     "presets": [
