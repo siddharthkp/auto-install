@@ -8,7 +8,7 @@ Status](https://api.travis-ci.org/siddharthkp/auto-install.svg?branch=master)](h
 
 Auto installs dependencies as you code. Just hit save.
 
-![Auto installs dependencies as you code](http://nmotw.in/images/auto-install/auto-install.gif)
+![Auto installs dependencies as you code](https://raw.githubusercontent.com/siddharthkp/auto-install/master/demo.gif)
 
 Featured in [npm weekly #56](http://us9.campaign-archive2.com/?u=077dfd41302a71310cef619e5&id=9e020606f1)!
 
