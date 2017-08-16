@@ -45,6 +45,6 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 MIT © [siddharthkp](https://github.com/siddharthkp)
 
-#### License
+#### Sponsor
 
 [![Sponsor](https://app.codesponsor.io/embed/LhLT2c31ydJzdLUuSR9f8mCA/siddharthkp/auto-install.svg)](https://app.codesponsor.io/link/LhLT2c31ydJzdLUuSR9f8mCA/siddharthkp/auto-install)
