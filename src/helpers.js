@@ -74,7 +74,8 @@ let getModulesFromFile = (path) => {
 
         modules = modules.filter((module) => isValidModule(module));
     } catch (err) {
-        console.log(colors.red(`Could not parse ${path}. There is a syntax error in file`));
+        const line = content.split('\n')[err.loc.line - 1];
+        console.log(colors.red(`Could not parse ${path}. There is a syntax error in file at line ${err.loc.line} column: ${err.loc.column}.\n${line.slice(0, err.loc.column - 1)}^${line.slice(err.loc.column - 1)}`));
     }
     return modules;
 };
