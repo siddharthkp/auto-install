@@ -2,7 +2,7 @@
 
 require('chai').should();
 var helpers = require('../../lib/helpers');
-var syncExec = require('sync-exec');
+var {execSync} = require('child_process');
 
 describe('packageJSONExists', function () {
     it('should return true', function () {
@@ -10,8 +10,8 @@ describe('packageJSONExists', function () {
     });
 
     it('should return false', function () {
-        syncExec('mv package.json package.json.disappeared');
+        execSync('mv package.json package.json.disappeared');
         helpers.packageJSONExists().should.equal(false);
-        syncExec('mv package.json.disappeared package.json');
+        execSync('mv package.json.disappeared package.json');
     });
 });
