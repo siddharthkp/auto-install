@@ -1,7 +1,7 @@
 const fs = require('fs');
 const glob = require('glob');
+const {execSync} = require('child_process');
 const isBuiltInModule = require('is-builtin-module');
-const syncExec = require('sync-exec');
 const ora = require('ora');
 const logSymbols = require('log-symbols');
 const request = require('request');
@@ -156,12 +156,14 @@ let handleError = (err) => {
  */
 
 let runCommand = (command) => {
-    let response = syncExec(command);
-    if (response.stderr) {
-        console.log();
-        handleError(response.stderr);
+    let succeeded = true;
+    try {
+        execSync(command, {encoding: 'utf8'});
+    } catch (error) {
+        succeeded = false;
+        handleError(error.stderr);
     }
-    return !response.status; // status = 0 for success
+    return succeeded;
 };
 
 /* Show pretty outputs
