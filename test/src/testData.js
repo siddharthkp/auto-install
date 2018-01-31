@@ -1,6 +1,5 @@
 let installedModules = [
     {name: 'request', dev: false},
-    {name: 'sync-exec', dev: false},
     {name: 'yargs', dev: false},
     {name: 'mocha', dev: true}
 ];
@@ -19,7 +18,6 @@ let usedModules = [
 ];
 
 let unusedModules = [
-    {name: 'sync-exec', dev: false},
     {name: 'mocha', dev: true}
 ];
 
