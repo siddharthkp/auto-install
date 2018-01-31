@@ -66,10 +66,11 @@ let isValidModule = ({name}) => {
 let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
     let modules = [];
+    const detectiveOptions = {parse: {sourceType: 'module'}};
     try {
-        modules = detective(content, {parse: {sourceType: 'module'}});
+        modules = detective(content, detectiveOptions);
 
-        let es6modules = es6detective(content, {parse: {sourceType: 'module'}});
+        let es6modules = es6detective(content, detectiveOptions);
         modules = modules.concat(es6modules);
 
         modules = modules.filter((module) => isValidModule(module));
