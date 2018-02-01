@@ -2,7 +2,9 @@
 
 require('chai').should();
 var helpers = require('../../lib/helpers');
-var {execSync} = require('child_process');
+
+var _require = require('child_process'),
+    execSync = _require.execSync;
 
 describe('packageJSONExists', function () {
     it('should return true', function () {
