@@ -4,12 +4,12 @@ const {execSync} = require('child_process');
 const isBuiltInModule = require('is-builtin-module');
 const ora = require('ora');
 const logSymbols = require('log-symbols');
-const request = require('request');
 const detective = require('detective');
 const es6detective = require('detective-es6');
 const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
+const https = require('https');
 require('./includes-polyfill');
 
 /* File reader
@@ -194,15 +194,22 @@ const POPULARITY_THRESHOLD = 10000;
 let isModulePopular = (name, callback) => {
     let spinner = startSpinner(`Checking ${name}`, 'yellow');
     let url = `https://api.npmjs.org/downloads/point/last-month/${name}`;
-    request(url, (error, response, body) => {
-        stopSpinner(spinner);
-        if (error && error.code === 'ENOTFOUND') {
-            console.log(colors.red('Could not connect to npm, check your internet connection!'));
-        } else {
-            let downloads = JSON.parse(body).downloads;
-            callback(downloads > POPULARITY_THRESHOLD);
-        }
-    });
+    https.get(url)
+        .then(response => {
+            let body = '';
+            response.on('data', data => {
+                body += data;
+            });
+
+            response.on('end', () => {
+                stopSpinner(spinner);
+                let downloads = JSON.parse(body).downloads;
+                callback(downloads > POPULARITY_THRESHOLD);
+            });
+        })
+        .catch(error => {
+            console.log(colors.red('Could not connect to npm, check your internet connection!'), error);
+        });
 };
 
 /* Get install command
