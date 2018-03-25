@@ -31,6 +31,8 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 `--yarn`    Use [yarn](https://yarnpkg.com) instead of npm
 
+`--notify`  Enable notifications for when dependencies are installed or uninstalled
+
 #### Show your support
 
 :star: this repo
