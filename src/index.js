@@ -16,6 +16,9 @@ if (argv.secure) secureMode = true;
 let uninstallMode = true;
 if (argv['dont-uninstall']) uninstallMode = false;
 
+var notifyMode = false;
+if (argv['notify']) notifyMode = true;
+
 /* Watch files and repeat drill
  * Add a watcher, call main wrapper to repeat cycle
  */
@@ -56,15 +59,15 @@ main = () => {
 
     if (uninstallMode) {
         let unusedModules = helpers.diff(installedModules, usedModules);
-        for (let module of unusedModules) helpers.uninstallModule(module);
+        for (let module of unusedModules) helpers.uninstallModule(module, notifyMode);
     }
 
     // installModules
 
     let modulesNotInstalled = helpers.diff(usedModules, installedModules);
     for (let module of modulesNotInstalled) {
-        if (secureMode) helpers.installModuleIfTrusted(module);
-        else helpers.installModule(module);
+        if (secureMode) helpers.installModuleIfTrusted(module, notifyMode);
+        else helpers.installModule(module, notifyMode);
     }
 
     helpers.cleanup();
