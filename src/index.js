@@ -16,7 +16,7 @@ if (argv.secure) secureMode = true;
 let uninstallMode = true;
 if (argv['dont-uninstall']) uninstallMode = false;
 
-var notifyMode = false;
+let notifyMode = false;
 if (argv['notify']) notifyMode = true;
 
 /* Watch files and repeat drill
