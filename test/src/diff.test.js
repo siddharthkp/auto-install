@@ -4,7 +4,7 @@ const testData = require('./testData.js');
 
 describe('diff', () => {
     let installedModules = helpers.getInstalledModules();
-    let usedModules = helpers.getUsedModules();
+    let usedModules = helpers.getUsedModules(testData.includePath);
     usedModules = helpers.filterRegistryModules(usedModules);
     let unusedModules = helpers.diff(installedModules, usedModules);
     let modulesNotInstalled = helpers.diff(usedModules, installedModules);
@@ -12,7 +12,8 @@ describe('diff', () => {
         unusedModules.should.deep.equal(testData.unusedModules);
     });
     it('should return modulesNotInstalled', () => {
-        modulesNotInstalled.should.deep.equal(testData.modulesNotInstalled);
+        modulesNotInstalled.length.should.be.equal(7);
+        modulesNotInstalled.should.have.deep.members(testData.modulesNotInstalled);
     });
 });
 

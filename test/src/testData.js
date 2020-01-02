@@ -1,3 +1,5 @@
+let includePath = '**/*.{j,t}s';
+
 let installedModules = [
     {name: 'request', dev: false},
     {name: 'yargs', dev: false},
@@ -13,8 +15,9 @@ let usedModules = [
     {name: '@siddharthkp/auto-install', dev: false},
     {name: 'lodash/memoize', dev: false},
     {name: 'request', dev: false},
+    {name: 'async', dev: false},
     {name: 'ava', dev: false},
-    {name: 'async', dev: false}
+    {name: 'mongodb', dev: false}
 ];
 
 let unusedModules = [
@@ -27,7 +30,8 @@ let modulesNotInstalled = [
     {name: '@siddharthkp/auto-install', dev: false},
     {name: 'lodash', dev: false},
     {name: 'ava', dev: false},
-    {name: 'async', dev: false}
+    {name: 'async', dev: false},
+    {name: 'mongodb', dev: false}
 ];
 
 let filteredUsedModules = [
@@ -38,10 +42,12 @@ let filteredUsedModules = [
     {name: 'lodash', dev: false},
     {name: 'request', dev: false},
     {name: 'ava', dev: false},
-    {name: 'async', dev: false}
+    {name: 'async', dev: false},
+    {name: 'mongodb', dev: false}
 ];
 
 module.exports = {
+    includePath,
     installedModules,
     usedModules,
     unusedModules,

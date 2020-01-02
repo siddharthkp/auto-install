@@ -4,9 +4,7 @@ const {execSync} = require('child_process');
 const isBuiltInModule = require('is-builtin-module');
 const ora = require('ora');
 const logSymbols = require('log-symbols');
-const detective = require('detective');
-const es6detective = require('detective-es6');
-const typescriptDetective = require('detective-typescript');
+const detective = require('detective-typescript');
 const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
@@ -60,31 +58,17 @@ let isValidModule = ({name}) => {
     return regex.test(name);
 };
 
-/**
- * Checks if we need to parse typescript or javascript
- * and returns a detective that can handle it.
- */
-let getDetective = (typescript) => {
-    if (typescript) return (content) => typescriptDetective(content, {mixedImports: true});
-
-    return (content, options) => ([
-        ...detective(content, options),
-        ...es6detective(content, options)
-    ]);
-};
-
 /* Find modules from file
  * Returns array of modules from a file
  */
 
-let getModulesFromFile = (path, typescript) => {
+let getModulesFromFile = (path) => {
     let content = fs.readFileSync(path, 'utf8');
     let modules = [];
-    const detectiveOptions = {parse: {sourceType: 'module'}};
-    const correctDetective = getDetective(typescript);
+    const detectiveOptions = {mixedImports: true};
 
     try {
-        modules = correctDetective(content, detectiveOptions);
+        modules = detective(content, detectiveOptions);
         modules = modules.filter((module) => isValidModule(module));
     } catch (err) {
         const line = content.split('\n')[err.loc.line - 1];
@@ -139,11 +123,11 @@ let deduplicate = (modules) => {
  * Read all .js files and grep for modules
  */
 
-let getUsedModules = (path, typescript) => {
+let getUsedModules = (path) => {
     let files = getFiles(path);
     let usedModules = [];
     for (let fileName of files) {
-        let modulesFromFile = getModulesFromFile(fileName, typescript);
+        let modulesFromFile = getModulesFromFile(fileName);
         let dev = isTestFile(fileName);
         for (let name of modulesFromFile) usedModules.push({name, dev});
     }
