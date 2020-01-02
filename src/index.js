@@ -16,19 +16,22 @@ if (argv.secure) secureMode = true;
 let uninstallMode = true;
 if (argv['dont-uninstall']) uninstallMode = false;
 
+let includePath = '**/*.js';
+if (argv.include) includePath = argv.include;
+
 /* Watch files and repeat drill
  * Add a watcher, call main wrapper to repeat cycle
  */
 
 let initializeWatchers = () => {
-    let watcher = chokidar.watch('**/*.js', {
+    let watcher = chokidar.watch(includePath, {
         ignored: 'node_modules'
     });
     watcher.on('change', main)
     .on('unlink', main);
 
     watchersInitialized = true;
-    console.log('Watchers initialized');
+    console.log(`Watchers initialized. Watching ${includePath}`);
 };
 
 /* Main wrapper
@@ -40,6 +43,8 @@ let initializeWatchers = () => {
  */
 
 main = () => {
+    if (watchersInitialized) console.log('Changes detected. Updating installed packages');
+
     if (!helpers.packageJSONExists()) {
         console.log(colors.red('package.json does not exist'));
         console.log(colors.red('You can create one by using `npm init`'));
@@ -49,7 +54,7 @@ main = () => {
     let installedModules = [];
     installedModules = helpers.getInstalledModules();
 
-    let usedModules = helpers.getUsedModules();
+    let usedModules = helpers.getUsedModules(includePath);
     usedModules = helpers.filterRegistryModules(usedModules);
 
     // removeUnusedModules
@@ -67,8 +72,10 @@ main = () => {
         else helpers.installModule(module);
     }
 
-    helpers.cleanup();
-    if (!watchersInitialized) initializeWatchers();
+    if (!watchersInitialized) {
+        initializeWatchers();
+        helpers.cleanup();
+    }
 };
 
 /* Turn the key */

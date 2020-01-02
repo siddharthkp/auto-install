@@ -50,7 +50,7 @@ let getInstalledModules = () => {
 /* Get all js files
  * Return path of all js files
  */
-let getFiles = () => glob.sync('**/*.js', {ignore: ['node_modules/**/*']});
+let getFiles = (path) => glob.sync(path, {ignore: ['node_modules/**/*']});
 
 /* Check for valid string - to stop malicious intentions */
 
@@ -127,8 +127,8 @@ let deduplicate = (modules) => {
  * Read all .js files and grep for modules
  */
 
-let getUsedModules = () => {
-    let files = getFiles();
+let getUsedModules = (path) => {
+    let files = getFiles(path);
     let usedModules = [];
     for (let fileName of files) {
         let modulesFromFile = getModulesFromFile(fileName);
