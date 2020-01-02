@@ -43,8 +43,6 @@ let initializeWatchers = () => {
  */
 
 main = () => {
-    if (watchersInitialized) console.log('Changes detected. Updating installed packages');
-
     if (!helpers.packageJSONExists()) {
         console.log(colors.red('package.json does not exist'));
         console.log(colors.red('You can create one by using `npm init`'));
@@ -72,10 +70,8 @@ main = () => {
         else helpers.installModule(module);
     }
 
-    if (!watchersInitialized) {
-        initializeWatchers();
-        helpers.cleanup();
-    }
+    helpers.cleanup();
+    if (!watchersInitialized) initializeWatchers();
 };
 
 /* Turn the key */
