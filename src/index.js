@@ -16,7 +16,7 @@ if (argv.secure) secureMode = true;
 let uninstallMode = true;
 if (argv['dont-uninstall']) uninstallMode = false;
 
-let includePath = '**/*.js';
+let includePath = '**/*.{j,t}s';
 if (argv.include) includePath = argv.include;
 
 /* Watch files and repeat drill
