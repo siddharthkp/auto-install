@@ -31,6 +31,8 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 `--yarn`    Use [yarn](https://yarnpkg.com) instead of npm
 
+`--include "<path>"`  Specify which glob pattern should be watched for changes. (**Double quotes are required to avoid expanding the path**)
+
 #### Show your support
 
 :star: this repo
