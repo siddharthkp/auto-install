@@ -9,13 +9,14 @@ const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
 const https = require('https');
+const path = require('path');
 require('./includes-polyfill');
 
 /* File reader
  * Return contents of given file
  */
-let readFile = (path) => {
-    let content = fs.readFileSync(path, 'utf8');
+let readFile = (filePath) => {
+    let content = fs.readFileSync(filePath, 'utf8');
     return content;
 };
 
@@ -49,7 +50,7 @@ let getInstalledModules = () => {
 /* Get all js files
  * Return path of all js files
  */
-let getFiles = (path) => glob.sync(path, {ignore: ['node_modules/**/*']});
+let getFiles = (globPattern) => glob.sync(globPattern, {ignore: ['node_modules/**/*']});
 
 /* Check for valid string - to stop malicious intentions */
 
@@ -62,8 +63,8 @@ let isValidModule = ({name}) => {
  * Returns array of modules from a file
  */
 
-let getModulesFromFile = (path) => {
-    let content = fs.readFileSync(path, 'utf8');
+let getModulesFromFile = (filePath) => {
+    let content = fs.readFileSync(filePath, 'utf8');
     let modules = [];
     const detectiveOptions = {mixedImports: true};
 
@@ -72,7 +73,7 @@ let getModulesFromFile = (path) => {
         modules = modules.filter((module) => isValidModule(module));
     } catch (err) {
         const line = content.split('\n')[err.loc.line - 1];
-        console.log(colors.red(`Could not parse ${path}. There is a syntax error in file at line ${err.loc.line} column: ${err.loc.column}.\n${line.slice(0, err.loc.column - 1)}^${line.slice(err.loc.column - 1)}`));
+        console.log(colors.red(`Could not parse ${filePath}. There is a syntax error in file at line ${err.loc.line} column: ${err.loc.column}.\n${line.slice(0, err.loc.column - 1)}^${line.slice(err.loc.column - 1)}`));
     }
     return modules;
 };
@@ -123,8 +124,8 @@ let deduplicate = (modules) => {
  * Read all .js files and grep for modules
  */
 
-let getUsedModules = (path) => {
-    let files = getFiles(path);
+let getUsedModules = (globPattern) => {
+    let files = getFiles(globPattern);
     let usedModules = [];
     for (let fileName of files) {
         let modulesFromFile = getModulesFromFile(fileName);
@@ -231,11 +232,26 @@ let getInstallCommand = (name, dev) => {
     return command;
 };
 
+/**
+ * Given the name of an installed module,
+ * return a boolean informing if typescript
+ * definition files are included with that module
+ */
+let areTypesIncluded = (moduleName) => {
+    const modulePath = path.join(process.cwd(), 'node_modules', moduleName);
+    const modulePackage = require(`${modulePath}/package.json`); // eslint-disable-line global-require, import/no-dynamic-require
+    if (modulePackage.types || modulePackage.typings) return true;
+
+    return fs.existsSync(path.join(modulePath, 'index.d.ts'));
+};
+
 /* Install module
  * Install given module
  */
 
-let installModule = ({name, dev}) => {
+let installModule = ({name, dev}, skipTypes) => {
+    const installTypes = argv['install-types'] && !skipTypes;
+
     let spinner = startSpinner(`Installing ${name}`, 'green');
 
     let command = getInstallCommand(name, dev);
@@ -244,8 +260,17 @@ let installModule = ({name, dev}) => {
     if (dev) message += ' in devDependencies';
 
     let success = runCommand(command);
-    if (success) stopSpinner(spinner, message, 'green');
-    else stopSpinner(spinner, `${name} installation failed`, 'yellow');
+
+    if (!success) {
+        stopSpinner(spinner, `${name} installation failed`, 'yellow');
+        return;
+    }
+
+    stopSpinner(spinner, message, 'green');
+
+    if (installTypes || !areTypesIncluded(name)) {
+        installModule({name: `@types/${name}`, dev: true}, true);
+    }
 };
 
 /* is scoped module? */
@@ -302,6 +327,7 @@ let getUninstallCommand = (name) => {
 
 let uninstallModule = ({name, dev}) => {
     if (dev) return;
+    const installTypes = argv['install-types'];
 
     let command = getUninstallCommand(name);
     let message = `${name} removed`;
@@ -309,6 +335,11 @@ let uninstallModule = ({name, dev}) => {
     let spinner = startSpinner(`Uninstalling ${name}`, 'red');
     runCommand(command);
     stopSpinner(spinner, message, 'red');
+
+    const typeLibPath = path.join(process.cwd(), 'node_modules', `@types/${name}`);
+    if (installTypes && fs.existsSync(typeLibPath)) {
+        uninstallModule({name: `@types/${name}`, dev: false});
+    }
 };
 
 /* Remove built in/native modules */
