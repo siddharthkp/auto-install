@@ -19,6 +19,9 @@ if (argv['dont-uninstall']) uninstallMode = false;
 let includePath = '**/*.js';
 if (argv.include) includePath = argv.include;
 
+let typescript = false;
+if (argv.typescript) typescript = true;
+
 /* Watch files and repeat drill
  * Add a watcher, call main wrapper to repeat cycle
  */
@@ -52,7 +55,7 @@ main = () => {
     let installedModules = [];
     installedModules = helpers.getInstalledModules();
 
-    let usedModules = helpers.getUsedModules(includePath);
+    let usedModules = helpers.getUsedModules(includePath, typescript);
     usedModules = helpers.filterRegistryModules(usedModules);
 
     // removeUnusedModules
