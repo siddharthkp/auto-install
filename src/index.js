@@ -17,7 +17,6 @@ let uninstallMode = true;
 if (argv['dont-uninstall']) uninstallMode = false;
 
 let includePath = '**/*.{j,t}s';
-if (argv.include) includePath = argv.include;
 
 /* Watch files and repeat drill
  * Add a watcher, call main wrapper to repeat cycle

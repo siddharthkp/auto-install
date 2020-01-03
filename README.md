@@ -33,8 +33,6 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 `--install-types`  Tries to install `@types` type definitions for modules that don't have them packaged
 
-`--include "<path>"`  Specify which glob pattern should be watched for changes. (**Double quotes are required to avoid expanding the path**)
-
 #### Show your support
 
 :star: this repo
