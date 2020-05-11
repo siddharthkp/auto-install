@@ -13,7 +13,7 @@
     "lint": "eslint src",
     "build": "babel src -d lib && babel test/src -d test/lib",
     "run-tests": "cd example && mocha ../test/lib",
-    "test": "npm run lint && npm run build && npm run run-tests"
+    "test": "npm run build && npm run run-tests"
   },
   "engines": {
     "node": ">= 4.4.5"
