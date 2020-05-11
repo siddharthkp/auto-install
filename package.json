@@ -26,8 +26,9 @@
     "glob": "7.1.0",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",
-    "ora": "0.3.0",
+    "ora": "^0.3.0",
     "package-json": "2.4.0",
+    "which-pm": "^2.0.0",
     "yargs": "6.3.0"
   },
   "devDependencies": {

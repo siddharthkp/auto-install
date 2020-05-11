@@ -6,6 +6,7 @@ const ora = require('ora');
 const logSymbols = require('log-symbols');
 const detective = require('detective');
 const es6detective = require('detective-es6');
+const whichpm = require('which-pm');
 const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
@@ -151,6 +152,7 @@ let handleError = (err) => {
     } else console.log(colors.red(err));
 };
 
+
 /* Command runner
  * Run a given command
  */
@@ -212,19 +214,28 @@ let isModulePopular = (name, callback) => {
         });
 };
 
+/* Get package manager used
+ *
+ */
+const whichPackageManager = async () => {
+    const res = await whichpm(process.cwd());
+    const name = res.name;
+    return name;
+};
+
+
 /* Get install command
  *
  * Depends on package manager, dev and exact
  */
 
-let getInstallCommand = (name, dev) => {
-    let packageManager = 'npm';
-    if (argv.yarn) packageManager = 'yarn';
+let getInstallCommand = async (name, dev) => {
+    const packageManager = await whichPackageManager();
 
     let command;
 
-    if (packageManager === 'npm') {
-        command = `npm install ${name} --save`;
+    if (packageManager === 'npm' || packageManager === 'pnpm') {
+        command = `${packageManager} install ${name} --save`;
         if (dev) command += '-dev';
         if (argv.exact) command += ' --save-exact';
     } else if (packageManager === 'yarn') {
@@ -235,14 +246,15 @@ let getInstallCommand = (name, dev) => {
     return command;
 };
 
+
 /* Install module
  * Install given module
  */
 
-let installModule = ({name, dev}) => {
+let installModule = async ({name, dev}) => {
     let spinner = startSpinner(`Installing ${name}`, 'green');
 
-    let command = getInstallCommand(name, dev);
+    let command = await getInstallCommand(name, dev);
 
     let message = `${name} installed`;
     if (dev) message += ' in devDependencies';
