@@ -1,25 +1,24 @@
-const fs = require('fs');
-const glob = require('glob');
-const {execSync} = require('child_process');
-const isBuiltInModule = require('is-builtin-module');
-const ora = require('ora');
-const logSymbols = require('log-symbols');
-const detective = require('detective');
-const es6detective = require('detective-es6');
-const whichpm = require('which-pm');
-const colors = require('colors');
-const argv = require('yargs').argv;
-const packageJson = require('package-json');
-const https = require('https');
-const notifier = require('node-notifier');
-
+const fs = require("fs");
+const glob = require("glob");
+const { execSync } = require("child_process");
+const isBuiltInModule = require("is-builtin-module");
+const ora = require("ora");
+const logSymbols = require("log-symbols");
+const detective = require("detective");
+const es6detective = require("detective-es6");
+const whichpm = require("which-pm");
+const colors = require("colors");
+const argv = require("yargs").argv;
+const packageJson = require("package-json");
+const https = require("https");
+const notifier = require("node-notifier");
 
 /* File reader
  * Return contents of given file
  */
 let readFile = (path) => {
-    let content = fs.readFileSync(path, 'utf8');
-    return content;
+  let content = fs.readFileSync(path, "utf8");
+  return content;
 };
 
 /* Get installed modules
@@ -27,38 +26,38 @@ let readFile = (path) => {
  */
 
 let getInstalledModules = () => {
-    let content = JSON.parse(readFile('package.json'));
-    let installedModules = [];
+  let content = JSON.parse(readFile("package.json"));
+  let installedModules = [];
 
-    let dependencies = content.dependencies || {};
-    let devDependencies = content.devDependencies || {};
+  let dependencies = content.dependencies || {};
+  let devDependencies = content.devDependencies || {};
 
-    for (let key of Object.keys(dependencies)) {
-        installedModules.push({
-            name: key,
-            dev: false
-        });
-    }
-    for (let key of Object.keys(devDependencies)) {
-        installedModules.push({
-            name: key,
-            dev: true
-        });
-    }
+  for (let key of Object.keys(dependencies)) {
+    installedModules.push({
+      name: key,
+      dev: false,
+    });
+  }
+  for (let key of Object.keys(devDependencies)) {
+    installedModules.push({
+      name: key,
+      dev: true,
+    });
+  }
 
-    return installedModules;
+  return installedModules;
 };
 
 /* Get all js files
  * Return path of all js files
  */
-let getFiles = () => glob.sync('**/*.js', {ignore: ['node_modules/**/*']});
+let getFiles = () => glob.sync("**/*.js", { ignore: ["node_modules/**/*"] });
 
 /* Check for valid string - to stop malicious intentions */
 
-let isValidModule = ({name}) => {
-    let regex = new RegExp('^([a-z0-9-_]{1,})$');
-    return regex.test(name);
+let isValidModule = ({ name }) => {
+  let regex = new RegExp("^([a-z0-9-_]{1,})$");
+  return regex.test(name);
 };
 
 /* Find modules from file
@@ -66,30 +65,30 @@ let isValidModule = ({name}) => {
  */
 
 let getModulesFromFile = (path) => {
-    let content = fs.readFileSync(path, 'utf8');
-    let modules = [];
-    const detectiveOptions = {parse: {sourceType: 'module'}};
-    try {
-        modules = detective(content, detectiveOptions);
+  let content = fs.readFileSync(path, "utf8");
+  let modules = [];
+  const detectiveOptions = { parse: { sourceType: "module" } };
+  try {
+    modules = detective(content, detectiveOptions);
 
-        let es6modules = es6detective(content, detectiveOptions);
-        modules = modules.concat(es6modules);
+    let es6modules = es6detective(content, detectiveOptions);
+    modules = modules.concat(es6modules);
 
-        modules = modules.filter((module) => isValidModule(module));
-    } catch (err) {
-        const line = content.split('\n')[err.loc.line - 1];
-        console.log(
-            colors.red(
-                `Could not parse ${path}. There is a syntax error in file at line ${
-                    err.loc.line
-                } column: ${err.loc.column}.\n${line.slice(
-                    0,
-                    err.loc.column - 1
-                )}^${line.slice(err.loc.column - 1)}`
-            )
-        );
-    }
-    return modules;
+    modules = modules.filter((module) => isValidModule(module));
+  } catch (err) {
+    const line = content.split("\n")[err.loc.line - 1];
+    console.log(
+      colors.red(
+        `Could not parse ${path}. There is a syntax error in file at line ${
+          err.loc.line
+        } column: ${err.loc.column}.\n${line.slice(
+          0,
+          err.loc.column - 1
+        )}^${line.slice(err.loc.column - 1)}`
+      )
+    );
+  }
+  return modules;
 };
 
 /* Is test file?
@@ -97,7 +96,7 @@ let getModulesFromFile = (path) => {
  */
 
 let isTestFile = (name) =>
-    name.endsWith('.spec.js') || name.endsWith('.test.js');
+  name.endsWith(".spec.js") || name.endsWith(".test.js");
 
 /* Dedup similar modules
  * Deduplicates list
@@ -105,17 +104,17 @@ let isTestFile = (name) =>
  */
 
 let deduplicateSimilarModules = (modules) => {
-    let dedupedModules = [];
-    let dedupedModuleNames = [];
+  let dedupedModules = [];
+  let dedupedModuleNames = [];
 
-    for (let module of modules) {
-        if (!dedupedModuleNames.includes(module.name)) {
-            dedupedModules.push(module);
-            dedupedModuleNames.push(module.name);
-        }
+  for (let module of modules) {
+    if (!dedupedModuleNames.includes(module.name)) {
+      dedupedModules.push(module);
+      dedupedModuleNames.push(module.name);
     }
+  }
 
-    return dedupedModules;
+  return dedupedModules;
 };
 
 /* Dedup modules
@@ -124,19 +123,19 @@ let deduplicateSimilarModules = (modules) => {
  */
 
 let deduplicate = (modules) => {
-    let dedupedModules = [];
+  let dedupedModules = [];
 
-    let testModules = modules.filter((module) => module.dev);
-    dedupedModules = dedupedModules.concat(
-        deduplicateSimilarModules(testModules)
-    );
+  let testModules = modules.filter((module) => module.dev);
+  dedupedModules = dedupedModules.concat(
+    deduplicateSimilarModules(testModules)
+  );
 
-    let prodModules = modules.filter((module) => !module.dev);
-    dedupedModules = dedupedModules.concat(
-        deduplicateSimilarModules(prodModules)
-    );
+  let prodModules = modules.filter((module) => !module.dev);
+  dedupedModules = dedupedModules.concat(
+    deduplicateSimilarModules(prodModules)
+  );
 
-    return dedupedModules;
+  return dedupedModules;
 };
 
 /* Get used modules
@@ -144,15 +143,15 @@ let deduplicate = (modules) => {
  */
 
 let getUsedModules = () => {
-    let files = getFiles();
-    let usedModules = [];
-    for (let fileName of files) {
-        let modulesFromFile = getModulesFromFile(fileName);
-        let dev = isTestFile(fileName);
-        for (let name of modulesFromFile) usedModules.push({name, dev});
-    }
-    usedModules = deduplicate(usedModules);
-    return usedModules;
+  let files = getFiles();
+  let usedModules = [];
+  for (let fileName of files) {
+    let modulesFromFile = getModulesFromFile(fileName);
+    let dev = isTestFile(fileName);
+    for (let name of modulesFromFile) usedModules.push({ name, dev });
+  }
+  usedModules = deduplicate(usedModules);
+  return usedModules;
 };
 
 /* Handle error
@@ -160,13 +159,13 @@ let getUsedModules = () => {
  */
 
 let handleError = (err) => {
-    if (err.includes('E404')) {
-        console.log(colors.red('Module is not in the npm registry.'));
-    } else if (err.includes('ENOTFOUND')) {
-        console.log(
-            colors.red('Could not connect to npm, check your internet connection!')
-        );
-    } else console.log(colors.red(err));
+  if (err.includes("E404")) {
+    console.log(colors.red("Module is not in the npm registry."));
+  } else if (err.includes("ENOTFOUND")) {
+    console.log(
+      colors.red("Could not connect to npm, check your internet connection!")
+    );
+  } else console.log(colors.red(err));
 };
 
 /* Command runner
@@ -174,14 +173,25 @@ let handleError = (err) => {
  */
 
 let runCommand = (command) => {
-    let succeeded = true;
-    try {
-        execSync(command, {encoding: 'utf8'});
-    } catch (error) {
-        succeeded = false;
-        handleError(error.stderr);
-    }
-    return succeeded;
+  let succeeded = true;
+  try {
+    execSync(command, { encoding: "utf8" });
+  } catch (error) {
+    succeeded = false;
+    handleError(error.stderr);
+  }
+  return succeeded;
+};
+
+/* Enable and show notifications */
+
+let showNotification = (message) => {
+  notifier.notify({
+    title: "auto-install running",
+    message,
+    open: void 0,
+    wait: false,
+  });
 };
 
 /* Show pretty outputs
@@ -189,59 +199,58 @@ let runCommand = (command) => {
  */
 
 let startSpinner = (message, type) => {
-    let spinner = ora();
-    spinner.text = message;
-    spinner.color = type;
-    spinner.start();
-    return spinner;
+  let spinner = ora();
+  spinner.text = message;
+  spinner.color = type;
+  spinner.start();
+  return spinner;
 };
 
 let stopSpinner = (spinner, message, type, notifyMode) => {
-    spinner.stop();
-    if (!message) return;
-    let symbol;
-    if (type === 'red') symbol = logSymbols.error;
-    else if (type === 'yellow') symbol = logSymbols.warning;
-    else symbol = logSymbols.success;
-    if(notifyMode) showNotification(message)
-    console.log(symbol, message);
-
+  spinner.stop();
+  if (!message) return;
+  let symbol;
+  if (type === "red") symbol = logSymbols.error;
+  else if (type === "yellow") symbol = logSymbols.warning;
+  else symbol = logSymbols.success;
+  if (notifyMode) showNotification(message);
+  console.log(symbol, message);
 };
 
 /* Is module popular? - for secure mode */
 
 const POPULARITY_THRESHOLD = 10000;
 let isModulePopular = (name, callback) => {
-    let spinner = startSpinner(`Checking ${name}`, 'yellow');
-    let url = `https://api.npmjs.org/downloads/point/last-month/${name}`;
-    https
-        .get(url)
-        .then((response) => {
-            let body = '';
-            response.on('data', (data) => {
-                body += data;
-            });
+  let spinner = startSpinner(`Checking ${name}`, "yellow");
+  let url = `https://api.npmjs.org/downloads/point/last-month/${name}`;
+  https
+    .get(url)
+    .then((response) => {
+      let body = "";
+      response.on("data", (data) => {
+        body += data;
+      });
 
-            response.on('end', () => {
-                stopSpinner(spinner);
-                let downloads = JSON.parse(body).downloads;
-                callback(downloads > POPULARITY_THRESHOLD);
-            });
-        })
-        .catch(error => {
-            var message = 'Could not connect to npm, check your internet connection!'
-            console.log(colors.red(message), error);
-            if (argv['notify']) showNotification(message) 
-        });
+      response.on("end", () => {
+        stopSpinner(spinner);
+        let downloads = JSON.parse(body).downloads;
+        callback(downloads > POPULARITY_THRESHOLD);
+      });
+    })
+    .catch((error) => {
+      let message = "Could not connect to npm, check your internet connection!";
+      console.log(colors.red(message), error);
+      if (argv.notify) showNotification(message);
+    });
 };
 
 /* Get package manager used
  *
  */
 const whichPackageManager = async () => {
-    const res = await whichpm(process.cwd());
-    const name = res.name;
-    return name;
+  const res = await whichpm(process.cwd());
+  const name = res.name;
+  return name;
 };
 
 /* Get install command
@@ -250,82 +259,82 @@ const whichPackageManager = async () => {
  */
 
 let getInstallCommand = async (name, dev) => {
-    const packageManager = await whichPackageManager();
+  const packageManager = await whichPackageManager();
 
-    let command;
+  let command;
 
-    if (packageManager === 'npm' || packageManager === 'pnpm') {
-        command = `${packageManager} install ${name} --save`;
-        if (dev) command += '-dev';
-        if (argv.exact) command += ' --save-exact';
-    } else if (packageManager === 'yarn') {
-        command = `yarn add ${name}`;
-        if (dev) command += ' --dev';
+  if (packageManager === "npm" || packageManager === "pnpm") {
+    command = `${packageManager} install ${name} --save`;
+    if (dev) command += "-dev";
+    if (argv.exact) command += " --save-exact";
+  } else if (packageManager === "yarn") {
+    command = `yarn add ${name}`;
+    if (dev) command += " --dev";
     // yarn always adds exact
-    }
-    return command;
+  }
+  return command;
 };
 
 /* Install module
  * Install given module
  */
 
-let installModule = async ({name, dev}) => {
+let installModule = async ({ name, dev }, notifyMode) => {
+  let spinner = startSpinner(`Installing ${name}`, "green");
 
-    let spinner = startSpinner(`Installing ${name}`, 'green');
+  let command = await getInstallCommand(name, dev);
 
-    let command = await getInstallCommand(name, dev);
+  let message = `${name} installed`;
+  if (dev) message += " in devDependencies";
 
-    let message = `${name} installed`;
-    if (dev) message += ' in devDependencies';
-
-    let success = runCommand(command);
-    if (success) 
-    {
-        stopSpinner(spinner, message, 'green', notifyMode);
-    }
-    else {
-        stopSpinner(spinner, `${name} installation failed`, 'yellow', notifyMode);}
+  let success = runCommand(command);
+  if (success) {
+    stopSpinner(spinner, message, "green", notifyMode);
+  } else {
+    stopSpinner(spinner, `${name} installation failed`, "yellow", notifyMode);
+  }
 };
 
 /* is scoped module? */
 
-let isScopedModule = (name) => name[0] === '@';
+let isScopedModule = (name) => name[0] === "@";
 
 /* Install module if author is trusted */
 
-let installModuleIfTrustedAuthor = ({name, dev}, notifyMode) => {
-    let trustedAuthor = argv['trust-author'];
-    packageJson(name).then(json => {
-        if (json.author && json.author.name === trustedAuthor) installModule({name, dev}, notifyMode);
-        else {
-            console.log(colors.red(`${name} not trusted`));
-            if(notifyMode) showNotification(`${name} not trusted`)
-        }
-    });
+let installModuleIfTrustedAuthor = ({ name, dev }, notifyMode) => {
+  let trustedAuthor = argv["trust-author"];
+  packageJson(name).then((json) => {
+    if (json.author && json.author.name === trustedAuthor) {
+      installModule({ name, dev }, notifyMode);
+    } else {
+      console.log(colors.red(`${name} not trusted`));
+      if (notifyMode) showNotification(`${name} not trusted`);
+    }
+  });
 };
 
 /* Install module if trusted
  * Call isModulePopular before installing
  */
 
-let installModuleIfTrusted = ({name, dev}, notifyMode) => {
-    // Trust scoped modules
-    if (isScopedModule(name)) installModule({name, dev}, notifyMode);
-    else {
-        isModulePopular(name, (popular) => {
-            // Popular as proxy for trusted
-            if (popular) installModule({name, dev}, notifyMode);
-            // Trusted Author
-            else if (argv['trust-author']) installModuleIfTrustedAuthor({name, dev}, notifyMode);
-
-            // Not trusted
-            else {
-                console.log(colors.red(`${name} not trusted`));
-                if(notifyMode) showNotification(`${name} not trusted`)
-            }
-        });
-    }
+let installModuleIfTrusted = ({ name, dev }, notifyMode) => {
+  // Trust scoped modules
+  if (isScopedModule(name)) installModule({ name, dev }, notifyMode);
+  else {
+    isModulePopular(name, (popular) => {
+      // Popular as proxy for trusted
+      if (popular) installModule({ name, dev }, notifyMode);
+      // Trusted Author
+      else if (argv["trust-author"]) {
+        installModuleIfTrustedAuthor({ name, dev }, notifyMode);
+      }
+      // Not trusted
+      else {
+        console.log(colors.red(`${name} not trusted`));
+        if (notifyMode) showNotification(`${name} not trusted`);
+      }
+    });
+  }
 };
 
 /* Get uninstall command
@@ -334,56 +343,56 @@ let installModuleIfTrusted = ({name, dev}, notifyMode) => {
  */
 
 let getUninstallCommand = (name) => {
-    let packageManager = 'npm';
-    if (argv.yarn) packageManager = 'yarn';
+  let packageManager = "npm";
+  if (argv.yarn) packageManager = "yarn";
 
-    let command;
+  let command;
 
-    if (packageManager === 'npm') command = `npm uninstall ${name} --save`;
-    else if (packageManager === 'yarn') command = `yarn remove ${name}`;
+  if (packageManager === "npm") command = `npm uninstall ${name} --save`;
+  else if (packageManager === "yarn") command = `yarn remove ${name}`;
 
-    return command;
+  return command;
 };
 
 /* Uninstall module */
 
-let uninstallModule = ({name, dev}, notifyMode) => {
-    if (dev) return;
+let uninstallModule = ({ name, dev }, notifyMode) => {
+  if (dev) return;
 
-    let command = getUninstallCommand(name);
-    let message = `${name} removed`;
+  let command = getUninstallCommand(name);
+  let message = `${name} removed`;
 
-    let spinner = startSpinner(`Uninstalling ${name}`, 'red');
-    runCommand(command);
-    stopSpinner(spinner, message, 'red', notifyMode);
+  let spinner = startSpinner(`Uninstalling ${name}`, "red");
+  runCommand(command);
+  stopSpinner(spinner, message, "red", notifyMode);
 };
 
 /* Remove built in/native modules */
 
 let removeBuiltInModules = (modules) =>
-    modules.filter((module) => !isBuiltInModule(module.name));
+  modules.filter((module) => !isBuiltInModule(module.name));
 
 /* Remove local files that are required */
 
 let removeLocalFiles = (modules) =>
-    modules.filter((module) => !module.name.includes('./'));
+  modules.filter((module) => !module.name.includes("./"));
 
 /* Remove file paths from module names
  * Example: convert `colors/safe` to `colors`
  */
 
 let removeFilePaths = (modules) => {
-    for (let module of modules) {
-        let slicedName = module.name.split('/')[0];
-        if (slicedName.substr(0, 1) !== '@') module.name = slicedName;
-    }
-    return modules;
+  for (let module of modules) {
+    let slicedName = module.name.split("/")[0];
+    if (slicedName.substr(0, 1) !== "@") module.name = slicedName;
+  }
+  return modules;
 };
 
 /* Filter registry modules */
 
 let filterRegistryModules = (modules) =>
-    removeBuiltInModules(removeFilePaths(removeLocalFiles(modules)));
+  removeBuiltInModules(removeFilePaths(removeLocalFiles(modules)));
 
 /* Get module names from array of module objects */
 
@@ -392,17 +401,17 @@ let getNamesFromModules = (modules) => modules.map((module) => module.name);
 /* Modules diff */
 
 let diff = (first, second) => {
-    let namesFromSecond = getNamesFromModules(second);
-    return first.filter((module) => !namesFromSecond.includes(module.name));
+  let namesFromSecond = getNamesFromModules(second);
+  return first.filter((module) => !namesFromSecond.includes(module.name));
 };
 
 /* Reinstall modules */
 
 let cleanup = () => {
-    let spinner = startSpinner('Cleaning up', 'green');
-    if (argv.yarn) runCommand('yarn');
-    else runCommand('npm install');
-    stopSpinner(spinner);
+  let spinner = startSpinner("Cleaning up", "green");
+  if (argv.yarn) runCommand("yarn");
+  else runCommand("npm install");
+  stopSpinner(spinner);
 };
 
 /* Does package.json exist?
@@ -411,27 +420,17 @@ let cleanup = () => {
  *     removing unused modules
  */
 
-let packageJSONExists = () => fs.existsSync('package.json');
+let packageJSONExists = () => fs.existsSync("package.json");
 
-/* Public helper functions */
-
-var showNotification = function showNotification(message) {
-    notifier.notify({
-         title: 'auto-install',
-        message: message,
-        open: void 0,
-        wait: false,
-      });
-}
 module.exports = {
-    getInstalledModules,
-    getUsedModules,
-    filterRegistryModules,
-    installModule,
-    installModuleIfTrusted,
-    uninstallModule,
-    diff,
-    cleanup,
-    packageJSONExists,
-    showNotification
+  getInstalledModules,
+  getUsedModules,
+  filterRegistryModules,
+  installModule,
+  installModuleIfTrusted,
+  uninstallModule,
+  diff,
+  cleanup,
+  packageJSONExists,
+  showNotification,
 };

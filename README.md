@@ -26,9 +26,9 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 `--exact` Install exact version similar to `npm install express --save-exact`
 
-`--dont-uninstall` Do not uninstall unused modules
+`--uninstall` Add flag to uninstall unused modules found in package.json
 
-`--notify`  Enable notifications for when dependencies are installed or uninstalled
+`--notify` Enable notifications for when dependencies are installed or uninstalled
 
 #### Show your support
 

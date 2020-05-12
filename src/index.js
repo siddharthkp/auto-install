@@ -13,11 +13,11 @@ let main;
 let secureMode = false;
 if (argv.secure) secureMode = true;
 
-let uninstallMode = true;
-if (argv['dont-uninstall']) uninstallMode = false;
+let uninstallMode = false;
+if (argv.uninstall) uninstallMode = true;
 
 let notifyMode = false;
-if (argv['notify']) notifyMode = true;
+if (argv.notify) notifyMode = true;
 
 /* Watch files and repeat drill
  * Add a watcher, call main wrapper to repeat cycle
@@ -27,8 +27,7 @@ let initializeWatchers = () => {
     let watcher = chokidar.watch('**/*.js', {
         ignored: 'node_modules'
     });
-    watcher.on('change', main)
-        .on('unlink', main);
+    watcher.on('change', main).on('unlink', main);
 
     watchersInitialized = true;
     console.log('Watchers initialized');
@@ -59,7 +58,7 @@ main = () => {
 
     if (uninstallMode) {
         let unusedModules = helpers.diff(installedModules, usedModules);
-        for (let module of unusedModules) helpers.uninstallModule(module, notifyMode);
+        for (let module of unusedModules) { helpers.uninstallModule(module, notifyMode); }
     }
 
     // installModules
@@ -76,4 +75,3 @@ main = () => {
 
 /* Turn the key */
 main();
-
