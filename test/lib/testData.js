@@ -1,6 +1,6 @@
 "use strict";
 
-var installedModules = [{
+let installedModules = [{
   name: 'request',
   dev: false
 }, {
@@ -10,7 +10,7 @@ var installedModules = [{
   name: 'mocha',
   dev: true
 }];
-var usedModules = [{
+let usedModules = [{
   name: 'chai',
   dev: true
 }, {
@@ -41,11 +41,11 @@ var usedModules = [{
   name: 'async',
   dev: false
 }];
-var unusedModules = [{
+let unusedModules = [{
   name: 'mocha',
   dev: true
 }];
-var modulesNotInstalled = [{
+let modulesNotInstalled = [{
   name: 'chai',
   dev: true
 }, {
@@ -64,7 +64,7 @@ var modulesNotInstalled = [{
   name: 'async',
   dev: false
 }];
-var filteredUsedModules = [{
+let filteredUsedModules = [{
   name: 'chai',
   dev: true
 }, {
@@ -90,9 +90,9 @@ var filteredUsedModules = [{
   dev: false
 }];
 module.exports = {
-  installedModules: installedModules,
-  usedModules: usedModules,
-  unusedModules: unusedModules,
-  modulesNotInstalled: modulesNotInstalled,
-  filteredUsedModules: filteredUsedModules
+  installedModules,
+  usedModules,
+  unusedModules,
+  modulesNotInstalled,
+  filteredUsedModules
 };

@@ -2,16 +2,17 @@
 
 require('chai').should();
 
-var helpers = require('../../lib/helpers');
+const helpers = require('../../lib/helpers');
 
-var _require = require('child_process'),
-    execSync = _require.execSync;
+const {
+  execSync
+} = require('child_process');
 
-describe('packageJSONExists', function () {
-  it('should return true', function () {
+describe('packageJSONExists', () => {
+  it('should return true', () => {
     helpers.packageJSONExists().should.equal(true);
   });
-  it('should return false', function () {
+  it('should return false', () => {
     execSync('mv package.json package.json.disappeared');
     helpers.packageJSONExists().should.equal(false);
     execSync('mv package.json.disappeared package.json');

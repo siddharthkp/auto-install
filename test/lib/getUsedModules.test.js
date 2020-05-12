@@ -2,12 +2,12 @@
 
 require('chai').should();
 
-var helpers = require('../../lib/helpers');
+const helpers = require('../../lib/helpers');
 
-var testData = require('./testData.js');
+const testData = require('./testData.js');
 
-describe('getUsedModules', function () {
-  it('should return used modules', function () {
+describe('getUsedModules', () => {
+  it('should return used modules', () => {
     helpers.getUsedModules().should.deep.equal(testData.usedModules);
   });
 });

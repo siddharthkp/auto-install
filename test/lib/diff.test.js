@@ -2,20 +2,20 @@
 
 require('chai').should();
 
-var helpers = require('../../lib/helpers');
+const helpers = require('../../lib/helpers');
 
-var testData = require('./testData.js');
+const testData = require('./testData.js');
 
-describe('diff', function () {
-  var installedModules = helpers.getInstalledModules();
-  var usedModules = helpers.getUsedModules();
+describe('diff', () => {
+  let installedModules = helpers.getInstalledModules();
+  let usedModules = helpers.getUsedModules();
   usedModules = helpers.filterRegistryModules(usedModules);
-  var unusedModules = helpers.diff(installedModules, usedModules);
-  var modulesNotInstalled = helpers.diff(usedModules, installedModules);
-  it('should return unusedModules', function () {
+  let unusedModules = helpers.diff(installedModules, usedModules);
+  let modulesNotInstalled = helpers.diff(usedModules, installedModules);
+  it('should return unusedModules', () => {
     unusedModules.should.deep.equal(testData.unusedModules);
   });
-  it('should return modulesNotInstalled', function () {
+  it('should return modulesNotInstalled', () => {
     modulesNotInstalled.should.deep.equal(testData.modulesNotInstalled);
   });
 });
