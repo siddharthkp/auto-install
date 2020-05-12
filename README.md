@@ -28,6 +28,8 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 `--dont-uninstall` Do not uninstall unused modules
 
+`--notify`  Enable notifications for when dependencies are installed or uninstalled
+
 #### Show your support
 
 :star: this repo
