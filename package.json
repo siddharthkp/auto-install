@@ -10,8 +10,8 @@
   "bin": "lib/index.js",
   "author": "siddharthkp",
   "scripts": {
-    "lint": "eslint src --fix",
-    "build": "babel src -d lib && babel test/src -d test/lib",
+    "lint": "eslint lib --fix",
+    "build": "npx babel src --out-dir lib && babel test/src --out-dir test/lib",
     "run-tests": "cd example && mocha ../test/lib",
     "test": "npm run build && npm run run-tests"
   },
