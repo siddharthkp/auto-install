@@ -11,7 +11,6 @@ const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
 const https = require('https');
-require('./includes-polyfill');
 
 /* File reader
  * Return contents of given file
@@ -77,7 +76,16 @@ let getModulesFromFile = (path) => {
         modules = modules.filter((module) => isValidModule(module));
     } catch (err) {
         const line = content.split('\n')[err.loc.line - 1];
-        console.log(colors.red(`Could not parse ${path}. There is a syntax error in file at line ${err.loc.line} column: ${err.loc.column}.\n${line.slice(0, err.loc.column - 1)}^${line.slice(err.loc.column - 1)}`));
+        console.log(
+            colors.red(
+                `Could not parse ${path}. There is a syntax error in file at line ${
+                    err.loc.line
+                } column: ${err.loc.column}.\n${line.slice(
+                    0,
+                    err.loc.column - 1
+                )}^${line.slice(err.loc.column - 1)}`
+            )
+        );
     }
     return modules;
 };
@@ -86,12 +94,13 @@ let getModulesFromFile = (path) => {
  * [.spec.js, .test.js] are supported test file formats
  */
 
-let isTestFile = (name) => (name.endsWith('.spec.js') || name.endsWith('.test.js'));
+let isTestFile = (name) =>
+    name.endsWith('.spec.js') || name.endsWith('.test.js');
 
 /* Dedup similar modules
  * Deduplicates list
  * Ignores/assumes type of the modules in list
-*/
+ */
 
 let deduplicateSimilarModules = (modules) => {
     let dedupedModules = [];
@@ -115,11 +124,15 @@ let deduplicateSimilarModules = (modules) => {
 let deduplicate = (modules) => {
     let dedupedModules = [];
 
-    let testModules = modules.filter(module => module.dev);
-    dedupedModules = dedupedModules.concat(deduplicateSimilarModules(testModules));
+    let testModules = modules.filter((module) => module.dev);
+    dedupedModules = dedupedModules.concat(
+        deduplicateSimilarModules(testModules)
+    );
 
-    let prodModules = modules.filter(module => !module.dev);
-    dedupedModules = dedupedModules.concat(deduplicateSimilarModules(prodModules));
+    let prodModules = modules.filter((module) => !module.dev);
+    dedupedModules = dedupedModules.concat(
+        deduplicateSimilarModules(prodModules)
+    );
 
     return dedupedModules;
 };
@@ -148,10 +161,11 @@ let handleError = (err) => {
     if (err.includes('E404')) {
         console.log(colors.red('Module is not in the npm registry.'));
     } else if (err.includes('ENOTFOUND')) {
-        console.log(colors.red('Could not connect to npm, check your internet connection!'));
+        console.log(
+            colors.red('Could not connect to npm, check your internet connection!')
+        );
     } else console.log(colors.red(err));
 };
-
 
 /* Command runner
  * Run a given command
@@ -196,10 +210,11 @@ const POPULARITY_THRESHOLD = 10000;
 let isModulePopular = (name, callback) => {
     let spinner = startSpinner(`Checking ${name}`, 'yellow');
     let url = `https://api.npmjs.org/downloads/point/last-month/${name}`;
-    https.get(url)
-        .then(response => {
+    https
+        .get(url)
+        .then((response) => {
             let body = '';
-            response.on('data', data => {
+            response.on('data', (data) => {
                 body += data;
             });
 
@@ -209,8 +224,11 @@ let isModulePopular = (name, callback) => {
                 callback(downloads > POPULARITY_THRESHOLD);
             });
         })
-        .catch(error => {
-            console.log(colors.red('Could not connect to npm, check your internet connection!'), error);
+        .catch((error) => {
+            console.log(
+                colors.red('Could not connect to npm, check your internet connection!'),
+                error
+            );
         });
 };
 
@@ -222,7 +240,6 @@ const whichPackageManager = async () => {
     const name = res.name;
     return name;
 };
-
 
 /* Get install command
  *
@@ -241,11 +258,10 @@ let getInstallCommand = async (name, dev) => {
     } else if (packageManager === 'yarn') {
         command = `yarn add ${name}`;
         if (dev) command += ' --dev';
-        // yarn always adds exact
+    // yarn always adds exact
     }
     return command;
 };
-
 
 /* Install module
  * Install given module
@@ -272,9 +288,10 @@ let isScopedModule = (name) => name[0] === '@';
 
 let installModuleIfTrustedAuthor = ({name, dev}) => {
     let trustedAuthor = argv['trust-author'];
-    packageJson(name).then(json => {
-        if (json.author && json.author.name === trustedAuthor) installModule({name, dev});
-        else console.log(colors.red(`${name} not trusted`));
+    packageJson(name).then((json) => {
+        if (json.author && json.author.name === trustedAuthor) {
+            installModule({name, dev});
+        } else console.log(colors.red(`${name} not trusted`));
     });
 };
 
@@ -290,7 +307,9 @@ let installModuleIfTrusted = ({name, dev}) => {
             // Popular as proxy for trusted
             if (popular) installModule({name, dev});
             // Trusted Author
-            else if (argv['trust-author']) installModuleIfTrustedAuthor({name, dev});
+            else if (argv['trust-author']) {
+                installModuleIfTrustedAuthor({name, dev});
+            }
             // Not trusted
             else console.log(colors.red(`${name} not trusted`));
         });
@@ -329,11 +348,13 @@ let uninstallModule = ({name, dev}) => {
 
 /* Remove built in/native modules */
 
-let removeBuiltInModules = (modules) => modules.filter((module) => !isBuiltInModule(module.name));
+let removeBuiltInModules = (modules) =>
+    modules.filter((module) => !isBuiltInModule(module.name));
 
 /* Remove local files that are required */
 
-let removeLocalFiles = (modules) => modules.filter((module) => !module.name.includes('./'));
+let removeLocalFiles = (modules) =>
+    modules.filter((module) => !module.name.includes('./'));
 
 /* Remove file paths from module names
  * Example: convert `colors/safe` to `colors`
@@ -349,21 +370,18 @@ let removeFilePaths = (modules) => {
 
 /* Filter registry modules */
 
-let filterRegistryModules = (modules) => removeBuiltInModules(
-    removeFilePaths(
-    removeLocalFiles(
-        modules
-    )));
+let filterRegistryModules = (modules) =>
+    removeBuiltInModules(removeFilePaths(removeLocalFiles(modules)));
 
 /* Get module names from array of module objects */
 
-let getNamesFromModules = (modules) => modules.map(module => module.name);
+let getNamesFromModules = (modules) => modules.map((module) => module.name);
 
 /* Modules diff */
 
 let diff = (first, second) => {
     let namesFromSecond = getNamesFromModules(second);
-    return first.filter(module => !namesFromSecond.includes(module.name));
+    return first.filter((module) => !namesFromSecond.includes(module.name));
 };
 
 /* Reinstall modules */
@@ -396,4 +414,3 @@ module.exports = {
     cleanup,
     packageJSONExists
 };
-
