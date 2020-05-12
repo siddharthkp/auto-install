@@ -22,6 +22,7 @@
     "@babel/polyfill": "^7.8.7",
     "chokidar": "2.0.0",
     "colors": "1.1.2",
+    "core-js": "^3.6.5",
     "detective": "5.0.2",
     "detective-es6": "1.2.0",
     "glob": "7.1.0",
