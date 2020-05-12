@@ -28,7 +28,7 @@ let initializeWatchers = () => {
         ignored: 'node_modules'
     });
     watcher.on('change', main)
-    .on('unlink', main);
+        .on('unlink', main);
 
     watchersInitialized = true;
     console.log('Watchers initialized');

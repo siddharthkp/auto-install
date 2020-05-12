@@ -1,19 +1,20 @@
-'use strict';
+"use strict";
 
 require('chai').should();
-var helpers = require('../../lib/helpers');
 
-var _require = require('child_process'),
-    execSync = _require.execSync;
+const helpers = require('../../lib/helpers');
 
-describe('packageJSONExists', function () {
-    it('should return true', function () {
-        helpers.packageJSONExists().should.equal(true);
-    });
+const {
+  execSync
+} = require('child_process');
 
-    it('should return false', function () {
-        execSync('mv package.json package.json.disappeared');
-        helpers.packageJSONExists().should.equal(false);
-        execSync('mv package.json.disappeared package.json');
-    });
+describe('packageJSONExists', () => {
+  it('should return true', () => {
+    helpers.packageJSONExists().should.equal(true);
+  });
+  it('should return false', () => {
+    execSync('mv package.json package.json.disappeared');
+    helpers.packageJSONExists().should.equal(false);
+    execSync('mv package.json.disappeared package.json');
+  });
 });

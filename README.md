@@ -17,7 +17,7 @@ Featured in [npm weekly #56](http://us9.campaign-archive2.com/?u=077dfd41302a713
 
 #### Usage
 
-Run `auto-install` in the directory you are working in.
+Run `auto-install` in the directory you are working in. Auto detects package manager.
 
 Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
@@ -28,8 +28,6 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 `--exact`   Install exact version similar to `npm install express --save-exact`
 
 `--dont-uninstall`   Do not uninstall unused modules
-
-`--yarn`    Use [yarn](https://yarnpkg.com) instead of npm
 
 `--notify`  Enable notifications for when dependencies are installed or uninstalled
 
