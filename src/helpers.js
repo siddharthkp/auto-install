@@ -11,6 +11,8 @@ const colors = require('colors');
 const argv = require('yargs').argv;
 const packageJson = require('package-json');
 const https = require('https');
+const notifier = require('node-notifier');
+
 
 /* File reader
  * Return contents of given file
@@ -194,14 +196,16 @@ let startSpinner = (message, type) => {
     return spinner;
 };
 
-let stopSpinner = (spinner, message, type) => {
+let stopSpinner = (spinner, message, type, notifyMode) => {
     spinner.stop();
     if (!message) return;
     let symbol;
     if (type === 'red') symbol = logSymbols.error;
     else if (type === 'yellow') symbol = logSymbols.warning;
     else symbol = logSymbols.success;
+    if(notifyMode) showNotification(message)
     console.log(symbol, message);
+
 };
 
 /* Is module popular? - for secure mode */
@@ -224,11 +228,10 @@ let isModulePopular = (name, callback) => {
                 callback(downloads > POPULARITY_THRESHOLD);
             });
         })
-        .catch((error) => {
-            console.log(
-                colors.red('Could not connect to npm, check your internet connection!'),
-                error
-            );
+        .catch(error => {
+            var message = 'Could not connect to npm, check your internet connection!'
+            console.log(colors.red(message), error);
+            if (argv['notify']) showNotification(message) 
         });
 };
 
@@ -268,6 +271,7 @@ let getInstallCommand = async (name, dev) => {
  */
 
 let installModule = async ({name, dev}) => {
+
     let spinner = startSpinner(`Installing ${name}`, 'green');
 
     let command = await getInstallCommand(name, dev);
@@ -276,8 +280,12 @@ let installModule = async ({name, dev}) => {
     if (dev) message += ' in devDependencies';
 
     let success = runCommand(command);
-    if (success) stopSpinner(spinner, message, 'green');
-    else stopSpinner(spinner, `${name} installation failed`, 'yellow');
+    if (success) 
+    {
+        stopSpinner(spinner, message, 'green', notifyMode);
+    }
+    else {
+        stopSpinner(spinner, `${name} installation failed`, 'yellow', notifyMode);}
 };
 
 /* is scoped module? */
@@ -286,12 +294,14 @@ let isScopedModule = (name) => name[0] === '@';
 
 /* Install module if author is trusted */
 
-let installModuleIfTrustedAuthor = ({name, dev}) => {
+let installModuleIfTrustedAuthor = ({name, dev}, notifyMode) => {
     let trustedAuthor = argv['trust-author'];
-    packageJson(name).then((json) => {
-        if (json.author && json.author.name === trustedAuthor) {
-            installModule({name, dev});
-        } else console.log(colors.red(`${name} not trusted`));
+    packageJson(name).then(json => {
+        if (json.author && json.author.name === trustedAuthor) installModule({name, dev}, notifyMode);
+        else {
+            console.log(colors.red(`${name} not trusted`));
+            if(notifyMode) showNotification(`${name} not trusted`)
+        }
     });
 };
 
@@ -299,19 +309,21 @@ let installModuleIfTrustedAuthor = ({name, dev}) => {
  * Call isModulePopular before installing
  */
 
-let installModuleIfTrusted = ({name, dev}) => {
+let installModuleIfTrusted = ({name, dev}, notifyMode) => {
     // Trust scoped modules
-    if (isScopedModule(name)) installModule({name, dev});
+    if (isScopedModule(name)) installModule({name, dev}, notifyMode);
     else {
         isModulePopular(name, (popular) => {
             // Popular as proxy for trusted
-            if (popular) installModule({name, dev});
+            if (popular) installModule({name, dev}, notifyMode);
             // Trusted Author
-            else if (argv['trust-author']) {
-                installModuleIfTrustedAuthor({name, dev});
-            }
+            else if (argv['trust-author']) installModuleIfTrustedAuthor({name, dev}, notifyMode);
+
             // Not trusted
-            else console.log(colors.red(`${name} not trusted`));
+            else {
+                console.log(colors.red(`${name} not trusted`));
+                if(notifyMode) showNotification(`${name} not trusted`)
+            }
         });
     }
 };
@@ -335,7 +347,7 @@ let getUninstallCommand = (name) => {
 
 /* Uninstall module */
 
-let uninstallModule = ({name, dev}) => {
+let uninstallModule = ({name, dev}, notifyMode) => {
     if (dev) return;
 
     let command = getUninstallCommand(name);
@@ -343,7 +355,7 @@ let uninstallModule = ({name, dev}) => {
 
     let spinner = startSpinner(`Uninstalling ${name}`, 'red');
     runCommand(command);
-    stopSpinner(spinner, message, 'red');
+    stopSpinner(spinner, message, 'red', notifyMode);
 };
 
 /* Remove built in/native modules */
@@ -403,6 +415,14 @@ let packageJSONExists = () => fs.existsSync('package.json');
 
 /* Public helper functions */
 
+var showNotification = function showNotification(message) {
+    notifier.notify({
+         title: 'auto-install',
+        message: message,
+        open: void 0,
+        wait: false,
+      });
+}
 module.exports = {
     getInstalledModules,
     getUsedModules,
@@ -412,5 +432,6 @@ module.exports = {
     uninstallModule,
     diff,
     cleanup,
-    packageJSONExists
+    packageJSONExists,
+    showNotification
 };

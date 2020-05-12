@@ -27,7 +27,8 @@
     "glob": "7.1.0",
     "is-builtin-module": "1.0.0",
     "log-symbols": "1.0.2",
-    "ora": "^0.3.0",
+    "node-notifier": "5.2.1",
+    "ora": "0.3.0",
     "package-json": "2.4.0",
     "which-pm": "^2.0.0",
     "yargs": "6.3.0"
