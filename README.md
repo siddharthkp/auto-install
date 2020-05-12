@@ -17,7 +17,7 @@ Featured in [npm weekly #56](http://us9.campaign-archive2.com/?u=077dfd41302a713
 
 #### Usage
 
-Run `auto-install` in the directory you are working in. Auto detect package manager.
+Run `auto-install` in the directory you are working in. Auto detects package manager.
 
 Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
