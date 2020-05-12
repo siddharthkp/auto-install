@@ -1,7 +1,6 @@
 #### auto-install
 
-[![Build
-Status](https://api.travis-ci.org/siddharthkp/auto-install.svg?branch=master)](https://travis-ci.org/siddharthkp/auto-install)
+[![Build Status](https://travis-ci.org/siddharthkp/auto-install.svg?branch=autodetect-manager)](https://travis-ci.org/siddharthkp/auto-install)
 [![npm](https://img.shields.io/npm/v/auto-install.svg?maxAge=3600)](https://www.npmjs.com/package/auto-install)
 [![npm](https://img.shields.io/npm/dt/auto-install.svg?maxAge=3600)](https://www.npmjs.com/package/auto-install)
 
@@ -23,11 +22,11 @@ Modules in `.spec.js` and `.test.js` are added to `devDependencies`
 
 #### Options
 
-`--secure`  Install popular modules only (> 10k downloads in the last month)
+`--secure` Install popular modules only (> 10k downloads in the last month)
 
-`--exact`   Install exact version similar to `npm install express --save-exact`
+`--exact` Install exact version similar to `npm install express --save-exact`
 
-`--dont-uninstall`   Do not uninstall unused modules
+`--dont-uninstall` Do not uninstall unused modules
 
 #### Show your support
 
